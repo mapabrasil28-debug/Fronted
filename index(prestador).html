@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<!-- 🔴 LOCAL 1 - COLE SUA URL DO BACKEND AQUI 🔴 -->
+<meta name="blim-api" content="https://🔴COLE_AQUI_A_URL_DO_BACKEND🔴">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FF2D78">
+<title>BLIM — Prestador</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ========== SEU CSS ORIGINAL COMPLETO - MANTIDO ÍNTEGRO ========== */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --pk:#FF2D78;--pk2:#FF6B9D;--pks:#FFF0F5;
+  --dk:#1C1C1E;--g4:#636366;--g5:#8E8E93;--g6:#AEAEB2;
+  --g7:#C7C7CC;--g8:#D1D1D6;--g9:#E5E5EA;--g10:#F2F2F7;
+  --ok:#34C759;--er:#FF3B30;--wa:#FF9500;--in:#007AFF;
+  --r:14px;--rl:20px;--rx:26px;--rf:999px;
+  --sh:0 4px 16px rgba(255,45,120,.12);--shb:0 1px 4px rgba(0,0,0,.07);
+  --f:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+html,body{height:100%;overflow:hidden;background:#000}
+body{font-family:var(--f);color:var(--dk);-webkit-font-smoothing:antialiased}
+#app{max-width:430px;margin:0 auto;height:100vh;background:#fff;position:relative;overflow:hidden}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background:#fff;transform:translateX(100%);transition:transform .38s cubic-bezier(.32,.72,0,1);z-index:1;overflow:hidden}
+.scr.on{transform:translateX(0);z-index:10}
+.sb2{height:max(34px,env(safe-area-inset-bottom));flex-shrink:0}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;padding:17px 24px;border:none;border-radius:var(--rf);font-family:var(--f);font-size:17px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn:active{transform:scale(.97)}
+.bpk{background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;box-shadow:0 6px 24px rgba(255,45,120,.38)}
+.bgn{background:linear-gradient(135deg,var(--ok),#30D158);color:#fff;box-shadow:0 6px 24px rgba(52,199,89,.38)}
+.ber{background:linear-gradient(135deg,var(--er),#FF6B6B);color:#fff;box-shadow:0 4px 16px rgba(255,59,48,.3)}
+.bgh{background:var(--g10);color:var(--dk)}
+.inp{width:100%;padding:15px 16px;background:var(--g10);border:1.5px solid transparent;border-radius:10px;font-family:var(--f);font-size:16px;color:var(--dk);outline:none;transition:all .2s;-webkit-appearance:none}
+.inp:focus{background:#fff;border-color:var(--pk);box-shadow:0 0 0 4px rgba(255,45,120,.08)}
+.iw{margin-bottom:14px}
+.iw label{display:block;font-size:13px;font-weight:600;color:var(--g4);margin-bottom:6px;padding-left:2px}
+textarea.inp{resize:none;height:80px;line-height:1.5}
+select.inp{-webkit-appearance:none}
+.nb{height:60px;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-top:.5px solid var(--g9);display:flex;flex-shrink:0;z-index:50}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer}
+.ni .ic{font-size:23px;transition:transform .15s}
+.ni .lb{font-size:10px;font-weight:600;color:var(--g5)}
+.ni.on .lb{color:var(--pk)}
+.ni.on .ic{transform:scale(1.12)}
+.tb{padding:14px 20px 10px;display:flex;align-items:center;gap:12px;flex-shrink:0;background:#fff}
+.tt{flex:1;font-size:17px;font-weight:700;text-align:center}
+.bk{width:38px;height:38px;border-radius:var(--rf);background:var(--g10);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--pk);flex-shrink:0}
+.bk:active{background:var(--g9)}
+.ph{width:38px}
+.sc{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.sc::-webkit-scrollbar{display:none}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center;position:relative;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
+.lm{width:88px;height:88px;border-radius:30px;background:linear-gradient(135deg,var(--pk),#FF8FB3);display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:22px;box-shadow:0 10px 36px rgba(255,45,120,.32);animation:fl 3s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.lt{font-size:52px;font-weight:800;letter-spacing:-3px;margin-bottom:6px;background:linear-gradient(135deg,var(--pk),#FF8FB3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tlb{background:none;border:none;color:var(--pk);font-family:var(--f);font-size:15px;font-weight:600;cursor:pointer;padding:12px 0;width:100%;text-align:center}
+.div{display:flex;align-items:center;gap:12px;color:var(--g6);font-size:13px;margin:20px 0}
+.div::before,.div::after{content:'';flex:1;height:.5px;background:var(--g9)}
+.tgl{width:58px;height:32px;border-radius:var(--rf);cursor:pointer;position:relative;transition:background .35s;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.tgl.on{background:var(--ok)}
+.tgl.off{background:var(--er)}
+.tgl-k{position:absolute;width:26px;height:26px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 2px 6px rgba(0,0,0,.22)}
+.tgl.on .tgl-k{left:29px}
+#map-prov{position:absolute;inset:0;z-index:1}
+.leaflet-tile-pane{filter:none!important}
+.leaflet-control-zoom{border:none!important;border-radius:14px!important;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.15)!important}
+.leaflet-control-zoom a{width:42px!important;height:42px!important;line-height:42px!important;font-size:20px!important;font-weight:800!important;color:var(--pk)!important;background:#fff!important;border:none!important}
+.leaflet-control-zoom-in{border-bottom:.5px solid var(--g9)!important}
+.mhdr{position:absolute;top:0;left:0;right:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:.5px solid var(--g9)}
+.mhdr-inner{padding:16px 20px 14px}
+.mbottom{position:absolute;bottom:60px;left:0;right:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-top:.5px solid var(--g9);padding:14px 20px}
+.earn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.ec{background:var(--g10);border-radius:10px;padding:10px 6px;text-align:center}
+.ev{font-size:15px;font-weight:800;color:var(--dk)}
+.ek{font-size:9px;color:var(--g5);font-weight:600;margin-top:2px;text-transform:uppercase}
+.notif-bg{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:800;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
+.notif-bg.on{opacity:1;pointer-events:all}
+.notif-sheet{background:#fff;border-radius:28px 28px 0 0;padding:24px 24px 44px;width:100%;transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1)}
+.notif-bg.on .notif-sheet{transform:translateY(0)}
+.nr{display:flex;justify-content:space-between;font-size:12px;color:var(--g5);margin-bottom:4px;font-weight:500}
+.step-wrap{background:var(--g10);border-radius:var(--rl);padding:20px;margin:16px;text-align:center}
+.step-dots{display:flex;gap:6px;justify-content:center;margin:14px 0}
+.step-dot{height:8px;border-radius:4px;background:var(--g8);transition:all .3s}
+.step-dot.on{background:var(--pk)}
+.chat-wrap{display:flex;flex-direction:column;height:100%}
+.chat-header{background:#fff;padding:14px 20px;border-bottom:.5px solid var(--g9);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--g10)}
+.chat-msgs::-webkit-scrollbar{display:none}
+.msg-bubble{max-width:75%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.5;word-break:break-word}
+.msg-me{background:var(--pk);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.msg-them{background:#fff;color:var(--dk);border-bottom-left-radius:4px;align-self:flex-start;box-shadow:var(--shb)}
+.msg-time{font-size:10px;opacity:.6;margin-top:3px;text-align:right}
+.chat-input-wrap{background:#fff;padding:12px 16px;border-top:.5px solid var(--g9);display:flex;gap:10px;align-items:flex-end;flex-shrink:0;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+.chat-inp{flex:1;padding:12px 16px;background:var(--g10);border:none;border-radius:var(--rf);font-family:var(--f);font-size:15px;color:var(--dk);outline:none;resize:none;max-height:100px;line-height:1.4}
+.chat-send{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk2));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 3px 12px rgba(255,45,120,.4)}
+.chat-send:active{transform:scale(.93)}
+.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--er);position:absolute;top:2px;right:2px}
+.prof-hero{background:linear-gradient(160deg,var(--pks),#fff 65%);padding:36px 20px 20px;text-align:center}
+.mrow{display:flex;align-items:center;gap:12px;padding:15px 16px;background:#fff;border-radius:var(--r);margin-bottom:3px;cursor:pointer;transition:background .15s;box-shadow:var(--shb)}
+.mrow:active{background:var(--g10)}
+.mic{width:36px;height:36px;border-radius:10px;background:var(--pks);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.tbox{background:var(--g10);border-radius:var(--r);padding:14px;height:130px;overflow-y:auto;font-size:12px;line-height:1.75;color:var(--g4);margin-bottom:12px}
+.tbox::-webkit-scrollbar{display:none}
+.cr{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px}
+.cr input[type=checkbox]{width:20px;height:20px;accent-color:var(--pk);flex-shrink:0;margin-top:2px}
+.cr span{font-size:13px;line-height:1.5;color:#48484A}
+.cr span strong{color:var(--pk)}
+.rs{font-size:44px;cursor:pointer;transition:transform .15s cubic-bezier(.34,1.56,.64,1);line-height:1}
+.rs.on{transform:scale(1.15)}
+.bd2{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--rf);font-size:12px;font-weight:600}
+.bgk{background:#E8F8EF;color:var(--ok)}
+.bwn{background:#FFF3E0;color:var(--wa)}
+.bpk2{background:var(--pks);color:var(--pk)}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(28,28,30,.92);backdrop-filter:blur(10px);color:#fff;padding:13px 22px;border-radius:var(--rf);font-size:14px;font-weight:600;z-index:9999;opacity:0;transition:all .32s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;max-width:88vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.sp{width:20px;height:20px;border:2.5px solid var(--pk2);border-top-color:var(--pk);border-radius:50%;animation:spspin .8s linear infinite;flex-shrink:0}
+@keyframes spspin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="toast" id="toast"></div>
+
+<!-- NOTIFICATION MODAL -->
+<div class="notif-bg" id="notif-bg">
+  <div class="notif-sheet">
+    <div style="width:40px;height:4px;background:var(--g8);border-radius:2px;margin:0 auto 20px"></div>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:56px;margin-bottom:8px;animation:fl 0.5s ease-in-out infinite">🔔</div>
+      <div style="font-size:20px;font-weight:800">Nova solicitação!</div>
+      <div style="font-size:14px;color:var(--g5);margin-top:4px">Responda em <span id="notif-timer" style="font-weight:700;color:var(--er)">30</span>s</div>
+    </div>
+    <div style="background:var(--g10);border-radius:var(--rl);padding:16px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div><div style="font-size:17px;font-weight:800" id="req-svc">Serviço</div><div style="font-size:13px;color:var(--g5);margin-top:2px" id="req-cat">Categoria</div></div>
+        <div style="font-size:24px;font-weight:800;color:var(--pk)" id="req-price">R$ —</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+        <div style="display:flex;align-items:flex-start;gap:8px"><span>📍</span><span id="req-addr" style="font-weight:600;color:var(--dk);line-height:1.4">—</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span>👤</span><span id="req-client" style="font-weight:600;color:var(--dk)">—</span><span id="req-stars" style="color:#FFB800;font-size:12px">★★★★★</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span>📏</span><span style="font-weight:600;color:var(--dk)"><span id="req-dist">—</span> km de você</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span>💳</span><span id="req-pay" style="font-weight:600;color:var(--dk)">—</span></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px">
+      <button class="btn ber" style="flex:1" onclick="recusar()">✕ Recusar</button>
+      <button class="btn bgn" style="flex:2" onclick="aceitar()">✓ Aceitar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPLASH -->
+<div class="scr on" id="s-splash">
+  <div class="hero">
+    <div class="blob" style="width:280px;height:280px;background:rgba(255,45,120,.08);top:-60px;right:-80px"></div>
+    <div class="blob" style="width:200px;height:200px;background:rgba(255,107,157,.06);bottom:-30px;left:-60px"></div>
+    <div class="lm">🛠️</div>
+    <div class="lt">blim</div>
+    <p style="font-size:14px;color:var(--g5);font-weight:500;margin-bottom:36px">Área do Prestador · Ganhe mais todo dia</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+      <span style="padding:7px 14px;background:var(--pks);border-radius:var(--rf);font-size:13px;font-weight:600;color:var(--pk)">⚡ Receba rápido</span>
+      <span style="padding:7px 14px;background:var(--pks);border-radius:var(--rf);font-size:13px;font-weight:600;color:var(--pk)">📍 Perto de você</span>
+      <span style="padding:7px 14px;background:var(--pks);border-radius:var(--rf);font-size:13px;font-weight:600;color:var(--pk)">🔒 Seguro</span>
+    </div>
+  </div>
+  <div style="padding:0 28px">
+    <button class="btn bpk" onclick="nav('s-register')" style="margin-bottom:10px">Quero ser prestadora</button>
+    <button class="btn bgh" onclick="nav('s-login')">Já tenho conta → Entrar</button>
+    <div class="sb2"></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="scr" id="s-register">
+  <div class="tb"><button class="bk" onclick="nav('s-splash')">‹</button><div class="tt">Cadastro</div><div class="ph"></div></div>
+  <div class="sc" style="padding:4px 24px 0">
+    <div style="background:#FFF3E0;border-radius:var(--r);padding:12px 14px;margin-bottom:20px;display:flex;gap:10px;align-items:center">
+      <span style="font-size:20px">⏳</span>
+      <span style="font-size:13px;color:#E65100;font-weight:600;line-height:1.5">Seu cadastro ficará em <strong>análise</strong> até aprovação do administrador (até 48h).</span>
+    </div>
+    <div class="iw"><label>Nome completo</label><input class="inp" id="rn" type="text" placeholder="Seu nome completo" autocomplete="name"></div>
+    <div class="iw"><label>CPF</label><input class="inp" type="tel" placeholder="000.000.000-00" inputmode="numeric"></div>
+    <div class="iw"><label>RG</label><input class="inp" type="text" placeholder="00.000.000-0"></div>
+    <div class="iw"><label>E-mail</label><input class="inp" id="re" type="email" placeholder="seu@email.com" autocomplete="email"></div>
+    <div class="iw"><label>Celular / WhatsApp</label><input class="inp" type="tel" placeholder="(00) 90000-0000"></div>
+    <div class="iw"><label>Senha</label><input class="inp" id="rpw" type="password" placeholder="Mínimo 8 caracteres (1 maiúscula + 1 número)" autocomplete="new-password"></div>
+    <div class="iw"><label>Endereço completo</label><input class="inp" type="text" placeholder="Rua, número, bairro, cidade, CEP"></div>
+    <div class="iw"><label>Raio de atendimento</label><select class="inp"><option>5 km</option><option selected>10 km</option><option>20 km</option><option>50 km</option></select></div>
+    <div class="iw"><label>Categoria principal</label><select class="inp" id="rcat"><option value="">Selecione...</option></select></div>
+    <div class="iw"><label>Experiência e habilidades</label><textarea class="inp" placeholder="Descreva sua experiência, certificados e diferenciais..."></textarea></div>
+    
+    <!-- UPLOAD DE DOCUMENTOS (NOVO) -->
+    <input type="file" id="inp-doc" accept="image/*,application/pdf" style="display:none" onchange="uploadDocument(this)">
+    <input type="file" id="inp-selfie" accept="image/*" style="display:none" onchange="uploadSelfie(this)">
+    <div style="display:flex;gap:10px;margin-bottom:8px">
+      <button class="btn bgh" style="flex:1;padding:12px;font-size:14px" onclick="document.getElementById('inp-doc').click()">📄 RG/CNH</button>
+      <button class="btn bgh" style="flex:1;padding:12px;font-size:14px" onclick="document.getElementById('inp-selfie').click()">🤳 Selfie</button>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <div id="prev-doc" style="flex:1;height:60px;background:var(--g10);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--g5);font-weight:600">Documento</div>
+      <div id="prev-selfie" style="flex:1;height:60px;background:var(--g10);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--g5);font-weight:600">Selfie</div>
+    </div>
+    
+    <div style="margin-bottom:18px">
+      <label style="font-size:13px;font-weight:600;color:var(--g4);margin-bottom:8px;display:block">Termos do Prestador</label>
+      <div class="tbox">
+        <strong>TERMOS DO PRESTADOR — BLIM</strong><br><br>
+        <strong>1. TAXA</strong><br>A BLIM retém 15% de cada serviço. Você recebe 85% via PIX semanalmente.<br><br>
+        <strong>2. QUALIDADE</strong><br>Avaliação mínima de 3.5⭐. Abaixo disso, conta suspensa para revisão.<br><br>
+        <strong>3. RESPONSABILIDADE</strong><br>Você é responsável pelos serviços prestados, ferramentas e equipamentos.<br><br>
+        <strong>4. CONDUTA</strong><br>Tratamento respeitoso obrigatório. Relatos de conduta inadequada = banimento imediato.<br><br>
+        <strong>5. APROVAÇÃO</strong><br>Conta ativa somente após análise e aprovação pela equipe BLIM (até 48h).<br><br>
+        <strong>6. CANCELAMENTOS</strong><br>Cancelamentos frequentes resultam em penalidades e possível suspensão.<br><br>
+        <strong>7. LGPD</strong><br>Seus dados são tratados conforme Lei nº 13.709/2018.
+      </div>
+      <div class="cr"><input type="checkbox" id="rt"><span>Li e aceito os <strong>Termos do Prestador</strong> e a taxa de <strong>15%</strong></span></div>
+    </div>
+    <button class="btn bpk" onclick="doRegister()">Enviar cadastro para análise</button>
+    <div class="sb2"></div>
+  </div>
+</div>
+
+<!-- PENDING -->
+<div class="scr" id="s-pending">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center">
+    <div style="font-size:80px;margin-bottom:24px;animation:fl 3s ease-in-out infinite">⏳</div>
+    <h2 style="font-size:24px;font-weight:800;margin-bottom:8px">Cadastro em análise</h2>
+    <p style="color:var(--g5);line-height:1.6;margin-bottom:28px">Recebemos seu cadastro! Nossa equipe irá analisar seus documentos em até <strong>48 horas</strong>. Você receberá um e-mail quando for aprovada. 💖</p>
+    <div style="background:var(--pks);border-radius:var(--rl);padding:16px 20px;margin-bottom:28px;width:100%">
+      <div style="font-size:13px;color:var(--pk);font-weight:600;line-height:1.8">✅ Dados recebidos<br>✅ Documentos enviados<br>🔄 Verificação em andamento...<br>⏳ Aguardando aprovação do admin...</div>
+    </div>
+    <button class="btn bgh" onclick="nav('s-splash')">Voltar ao início</button>
+    <div class="sb2"></div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="scr" id="s-login">
+  <div class="tb"><button class="bk" onclick="nav('s-splash')">‹</button><div class="tt">Entrar</div><div class="ph"></div></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px">
+    <h2 style="font-size:26px;font-weight:800;margin-bottom:4px">Olá, profissional 🛠️</h2>
+    <p style="font-size:14px;color:var(--g5);margin-bottom:28px">Entre na sua conta BLIM Prestador</p>
+    <div class="iw"><label>E-mail</label><input class="inp" id="le" type="email" placeholder="seu@email.com" autocomplete="username"></div>
+    <div class="iw"><label>Senha</label><input class="inp" id="lp" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+    <!-- Campo 2FA (aparece se precisar) -->
+    <div id="div-2fa" style="display:none" class="iw"><label>Código de verificação (2FA)</label><input class="inp" id="code2fa" type="text" placeholder="000000" autocomplete="off"></div>
+    <button class="tlb" style="text-align:right;padding:4px 0 20px;background:none;border:none;color:var(--pk);font-family:var(--f);font-size:15px;font-weight:600;cursor:pointer;width:100%" onclick="nav('s-forgot')">Esqueci minha senha</button>
+    <button class="btn bpk" onclick="doLogin()">Entrar</button>
+    <div class="div">ou</div>
+    <button class="btn bgh" onclick="nav('s-register')">Criar conta de prestadora</button>
+    <div class="sb2"></div>
+  </div>
+</div>
+
+<!-- NOVA TELA: ESQUECI MINHA SENHA -->
+<div class="scr" id="s-forgot">
+  <div class="tb"><button class="bk" onclick="nav('s-login')">‹</button><div class="tt">Recuperar senha</div><div class="ph"></div></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px">
+    <p style="margin-bottom:20px;text-align:center;color:var(--g5)">Digite seu e-mail e enviaremos um link para redefinir sua senha.</p>
+    <div class="iw"><label>E-mail</label><input class="inp" id="reset-email" type="email" placeholder="seu@email.com"></div>
+    <button class="btn bpk" onclick="forgotPassword()">Enviar link</button>
+    <button class="btn bgh" onclick="nav('s-login')" style="margin-top:10px">Voltar</button>
+  </div>
+</div>
+
+<!-- NOVA TELA: REDEFINIR SENHA (via link do e-mail) -->
+<div class="scr" id="s-reset-password">
+  <div class="tb"><button class="bk" onclick="nav('s-login')">‹</button><div class="tt">Nova senha</div><div class="ph"></div></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px">
+    <div class="iw"><label>Nova senha</label><input class="inp" id="new-password" type="password" placeholder="Mínimo 8 caracteres"></div>
+    <div class="iw"><label>Confirmar senha</label><input class="inp" id="confirm-password" type="password" placeholder="Digite novamente"></div>
+    <button class="btn bpk" onclick="submitResetPassword()">Redefinir senha</button>
+  </div>
+</div>
+
+<!-- NOVA TELA: CONFIGURAR 2FA -->
+<div class="scr" id="s-2fa">
+  <div class="tb"><button class="bk" onclick="nav('s-profile')">‹</button><div class="tt">Autenticação 2FA</div><div class="ph"></div></div>
+  <div class="sc" id="content-2fa" style="padding:20px;text-align:center"></div>
+</div>
+
+<!-- MAPA PRINCIPAL -->
+<div class="scr" id="s-map">
+  <div id="map-prov" style="position:absolute;inset:0;z-index:1"></div>
+  <div class="mhdr">
+    <div class="mhdr-inner">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <div style="font-size:13px;color:var(--g5);font-weight:500">Olá,</div>
+          <div style="font-size:18px;font-weight:800;letter-spacing:-.3px" id="prov-name">Prestadora</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div id="prov-avatar" onclick="nav('s-profile')" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk2));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 3px 12px rgba(255,45,120,.3)">P</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--g10);border-radius:12px;padding:12px 16px">
+        <div>
+          <div id="online-lbl" style="font-size:15px;font-weight:700;color:var(--ok)">● Online</div>
+          <div id="online-sub" style="font-size:12px;color:var(--g5);margin-top:1px">Recebendo solicitações</div>
+          <div id="prov-loc" style="font-size:11px;color:var(--g5);margin-top:2px">📍 Obtendo localização...</div>
+        </div>
+        <div class="tgl on" id="tgl-online" onclick="toggleOnline()"><div class="tgl-k"></div></div>
+      </div>
+      <div class="earn-grid">
+        <div class="ec"><div class="ev" style="color:var(--pk)" id="earn-today">R$0</div><div class="ek">Hoje</div></div>
+        <div class="ec"><div class="ev" id="earn-week">R$0</div><div class="ek">Semana</div></div>
+        <div class="ec"><div class="ev">4.9⭐</div><div class="ek">Nota</div></div>
+        <div class="ec"><div class="ev" id="earn-count">0</div><div class="ek">Serviços</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="mbottom">
+    <div id="map-status" style="text-align:center;font-size:14px;color:var(--g5);font-weight:500">
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px">
+        <div class="sp"></div>
+        <span>Aguardando solicitações próximas...</span>
+      </div>
+    </div>
+  </div>
+  <div class="nb" style="position:absolute;bottom:0;left:0;right:0">
+    <div class="ni on"><div class="ic">🗺️</div><div class="lb">Mapa</div></div>
+    <div class="ni" onclick="nav('s-earnings')"><div class="ic">💰</div><div class="lb">Ganhos</div></div>
+    <div class="ni" id="nav-chat-item" onclick="_onChatNavClick()" style="position:relative;opacity:0.3;pointer-events:none">
+      <div class="ic">💬</div><div class="lb">Chat</div>
+      <div class="unread-dot" id="chat-dot" style="display:none"></div>
+    </div>
+    <div class="ni" onclick="nav('s-profile')"><div class="ic">👤</div><div class="lb">Perfil</div></div>
+  </div>
+</div>
+
+<!-- SERVIÇO ACEITO -->
+<div class="scr" id="s-service">
+  <div class="tb">
+    <div class="tt">Em atendimento</div>
+    <div style="display:flex;align-items:center;gap:5px;margin-left:auto">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--ok);animation:blink 1s infinite"></div>
+      <span style="font-size:12px;color:var(--ok);font-weight:600">Ao vivo</span>
+    </div>
+  </div>
+  <div class="sc">
+    <div style="margin:16px;background:var(--g10);border-radius:var(--rl);padding:16px;display:flex;align-items:center;gap:14px">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--pk2),var(--pk));display:flex;align-items:center;justify-content:center;font-size:24px">👩</div>
+      <div style="flex:1">
+        <div style="font-size:16px;font-weight:700" id="svc-client-name">Cliente</div>
+        <div style="font-size:13px;color:var(--g5);margin-top:2px" id="svc-addr">—</div>
+        <div style="color:#FFB800;font-size:13px;margin-top:2px">★★★★★ 4.8</div>
+      </div>
+      <button onclick="nav('s-chat')" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk2));border:none;cursor:pointer;font-size:22px;box-shadow:0 3px 12px rgba(255,45,120,.4)">💬</button>
+    </div>
+    <div id="maps-btn" style="display:none;align-items:center;gap:12px;margin:0 16px 12px;background:#fff;border-radius:var(--rl);padding:14px 16px;box-shadow:var(--shb);border:1.5px solid #4285F4;cursor:pointer" onclick="openMapsChoice()">
+      <div style="width:44px;height:44px;border-radius:var(--r);background:#E8F0FE;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🗺️</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:800;color:#4285F4" id="maps-btn-label">Abrir no Google Maps</div>
+        <div id="maps-addr" style="font-size:12px;color:var(--g5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">—</div>
+      </div>
+      <div style="font-size:20px;color:#4285F4">↗</div>
+    </div>
+    <div class="step-wrap" id="step-card">
+      <div style="font-size:64px;margin-bottom:12px;animation:fl 2s ease-in-out infinite" id="step-icon">🚗</div>
+      <div style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--pk);color:#fff;font-size:13px;font-weight:700;margin-bottom:8px" id="step-num">1</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:6px" id="step-title">A caminho</div>
+      <div style="font-size:14px;color:var(--g5);margin-bottom:16px" id="step-desc">Dirija-se ao endereço do cliente</div>
+      <div style="font-size:22px;font-weight:800;color:var(--pk);margin-bottom:16px" id="step-price">R$ —</div>
+      <div class="step-dots" id="step-dots"></div>
+      <button class="btn bgn" id="step-btn" onclick="nextStep()">Avançar etapa →</button>
+    </div>
+    <div class="sb2"></div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="scr" id="s-chat">
+  <div class="chat-wrap">
+    <div class="chat-header">
+      <button class="bk" onclick="goBack()">‹</button>
+      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--pk2),var(--pk));display:flex;align-items:center;justify-content:center;font-size:20px">👩</div>
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:700" id="chat-name">Cliente</div>
+        <div style="font-size:12px;color:var(--ok);font-weight:500">● Online</div>
+      </div>
+      <button onclick="T('📞 Ligando...')" style="width:38px;height:38px;border-radius:50%;background:var(--pks);border:none;cursor:pointer;font-size:18px">📞</button>
+    </div>
+    <div class="chat-msgs" id="chat-msgs">
+      <div style="text-align:center;padding:20px 0;font-size:13px;color:var(--g6);font-weight:500">Início da conversa</div>
+    </div>
+    <div class="chat-input-wrap">
+      <textarea class="chat-inp" id="chat-inp" placeholder="Digite uma mensagem..." rows="1"
+        oninput="autoResize(this)"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
+      <button class="chat-send" onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- AVALIAÇÃO -->
+<div class="scr" id="s-rate">
+  <div class="sc">
+    <div style="text-align:center;padding:48px 32px 24px">
+      <div style="font-size:80px;margin-bottom:20px;animation:fl 2s ease-in-out infinite">💰</div>
+      <h2 style="font-size:24px;font-weight:800;margin-bottom:6px">Serviço finalizado!</h2>
+      <p style="color:var(--g5)">Você ganhou:</p>
+      <div style="font-size:48px;font-weight:800;color:var(--ok);letter-spacing:-2px;margin:10px 0" id="earn-final">R$ 0</div>
+      <div style="font-size:13px;color:var(--g5);margin-bottom:28px">(15% de taxa já descontado)</div>
+      <p style="font-size:15px;font-weight:700;color:var(--dk);margin-bottom:6px">Como foi a cliente?</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin:18px 0" id="rstars">
+        <span class="rs" onclick="setStars(1)">☆</span><span class="rs" onclick="setStars(2)">☆</span>
+        <span class="rs" onclick="setStars(3)">☆</span><span class="rs" onclick="setStars(4)">☆</span>
+        <span class="rs" onclick="setStars(5)">☆</span>
+      </div>
+    </div>
+    <div style="padding:0 24px">
+      <div class="iw"><label>Comentário (opcional)</label><textarea class="inp" placeholder="Como foi a experiência?"></textarea></div>
+      <button class="btn bpk" onclick="finalizarAvaliacao()" style="margin-bottom:12px">Enviar e voltar ao mapa 💖</button>
+      <button style="background:none;border:none;color:var(--pk);font-family:var(--f);font-size:15px;font-weight:600;cursor:pointer;padding:12px 0;width:100%;text-align:center" onclick="finalizarAvaliacao()">Pular</button>
+      <div class="sb2"></div>
+    </div>
+  </div>
+</div>
+
+<!-- GANHOS -->
+<div class="scr" id="s-earnings">
+  <div class="tb"><button class="bk" onclick="nav('s-map')">‹</button><div class="tt">Meus Ganhos</div><div class="ph"></div></div>
+  <div class="sc" style="padding:16px">
+    <div style="background:linear-gradient(155deg,var(--pk),#FF8FB3);border-radius:var(--rx);padding:28px 24px;color:#fff;text-align:center;margin-bottom:16px">
+      <div style="font-size:13px;opacity:.85;font-weight:600;margin-bottom:6px">TOTAL DO MÊS</div>
+      <div style="font-size:52px;font-weight:800;letter-spacing:-2px" id="earn-month">R$ 0</div>
+      <div style="font-size:13px;opacity:.8;margin-top:4px">Taxa de 15% já descontada</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:var(--r);padding:16px;box-shadow:var(--shb);text-align:center;border:.5px solid var(--g9)"><div style="font-size:24px;font-weight:800;color:var(--pk)" id="earn-today2">R$ 0</div><div style="font-size:12px;color:var(--g5);font-weight:600;margin-top:4px">Hoje</div></div>
+      <div style="background:#fff;border-radius:var(--r);padding:16px;box-shadow:var(--shb);text-align:center;border:.5px solid var(--g9)"><div style="font-size:24px;font-weight:800" id="earn-week2">R$ 0</div><div style="font-size:12px;color:var(--g5);font-weight:600;margin-top:4px">Semana</div></div>
+    </div>
+    <div style="font-size:17px;font-weight:800;margin-bottom:12px">Histórico</div>
+    <div id="earn-list"><div style="text-align:center;color:var(--g5);padding:32px;font-size:14px">Nenhum serviço realizado ainda</div></div>
+    <div class="sb2"></div>
+  </div>
+</div>
+
+<!-- PERFIL -->
+<div class="scr" id="s-profile">
+  <div class="tb"><button class="bk" onclick="nav('s-map')">‹</button><div class="tt">Meu perfil</div><div class="ph"></div></div>
+  <div class="sc">
+    <div class="prof-hero">
+      <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk2));display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:#fff;margin:0 auto 12px;box-shadow:0 4px 16px rgba(255,45,120,.3)" id="prof-av">P</div>
+      <div style="font-size:20px;font-weight:800" id="prof-name2">Prestadora</div>
+      <div style="font-size:14px;color:var(--g5);margin-top:2px" id="prof-email">—</div>
+      <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+        <span class="bd2 bgk">✓ Aprovada</span>
+        <span class="bd2 bpk2">⭐ 4.9</span>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-around;background:#fff;border-radius:var(--rl);padding:18px;margin:16px;box-shadow:var(--shb);border:.5px solid var(--g9)">
+      <div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--pk)" id="ps-month">R$0</div><div style="font-size:11px;color:var(--g5);font-weight:600;margin-top:2px">Este mês</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:800" id="ps-svcs">0</div><div style="font-size:11px;color:var(--g5);font-weight:600;margin-top:2px">Serviços</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--ok)">4.9⭐</div><div style="font-size:11px;color:var(--g5);font-weight:600;margin-top:2px">Avaliação</div></div>
+    </div>
+    <div style="margin:0 16px 12px">
+      <div style="font-size:12px;font-weight:700;color:var(--g5);margin-bottom:8px;padding-left:4px;letter-spacing:.5px">CONTA</div>
+      <!-- Botão para configurar 2FA -->
+      <div onclick="load2FAStatus()" style="display:flex;align-items:center;gap:12px;padding:15px 16px;background:#fff;border-radius:var(--r);margin-bottom:3px;cursor:pointer;box-shadow:var(--shb)">
+        <div class="mic">🔐</div>
+        <div style="flex:1;font-size:15px;font-weight:600">Autenticação de dois fatores (2FA)</div><div style="color:var(--g7);font-size:17px">›</div>
+      </div>
+      <div class="mrow" onclick="T('✏️ Editar')"><div class="mic">✏️</div><div style="flex:1;font-size:15px;font-weight:600">Editar dados pessoais</div><div style="color:var(--g7);font-size:17px">›</div></div>
+      <div class="mrow" onclick="T('🗂️ Documentos')"><div class="mic">🗂️</div><div style="flex:1;font-size:15px;font-weight:600">Meus documentos</div><div style="color:var(--g7);font-size:17px">›</div></div>
+      <div class="mrow" onclick="T('💳 Dados bancários')"><div class="mic">💳</div><div style="flex:1;font-size:15px;font-weight:600">Dados para pagamento</div><div style="color:var(--g7);font-size:17px">›</div></div>
+      <div class="mrow" onclick="nav('s-earnings')"><div class="mic">💰</div><div style="flex:1;font-size:15px;font-weight:600">Meus ganhos</div><div style="color:var(--g7);font-size:17px">›</div></div>
+      <div class="mrow" onclick="openMapPrefSheet()" id="map-pref-row">
+        <div class="mic">🗺️</div>
+        <div style="flex:1">
+          <div style="font-size:15px;font-weight:600">App de navegação</div>
+          <div style="font-size:12px;color:var(--g5);margin-top:2px" id="map-pref-label">Google Maps</div>
+        </div>
+        <div style="color:var(--g7);font-size:17px">›</div>
+      </div>
+    </div>
+    <div style="padding:0 16px 8px">
+      <button class="btn bgh" style="margin-bottom:10px;color:var(--er)" onclick="doLogout()">Sair da conta</button>
+    </div>
+    <div class="sb2"></div>
+  </div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// 🔴 LOCAL 2 - COLE SUA URL DO BACKEND AQUI 🔴
+// ════════════════════════════════════════════════════════════
+const API_URL = 'https://🔴COLE_AQUI_A_URL_DO_BACKEND🔴';
+
+// =============================================
+// SEGURANÇA JWT + SESSÃO ÚNICA
+// =============================================
+let accessToken = localStorage.getItem('accessToken');
+let refreshToken = localStorage.getItem('refreshToken');
+let currentUser = null;
+let online = true;
+let currentRequest = null;
+let requestPolling = null;
+let currentStep = 0;
+let _chatMsgs = [];
+let _chatPollTimer = null;
+let _map = null;
+let _myMarker = null;
+let _watchId = null;
+let _soundLoop = null;
+let _countdownIv = null;
+let socket = null;
+let pending2FA = { required: false, userId: null };
+
+let ST = {
+  user: { name: '', email: '', uid: '' },
+  earnings: { today: 0, week: 0, month: 0, svcs: 0 },
+  mapApp: localStorage.getItem('blim_mapApp') || 'google',
+  lat: -23.5505, lng: -46.6333
+};
+
+function getDeviceId() {
+  let id = localStorage.getItem('deviceId');
+  if (!id) { id = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 10); localStorage.setItem('deviceId', id); }
+  return id;
+}
+
+async function apiFetch(url, options = {}) {
+  const headers = { 'Content-Type': 'application/json', 'X-Device-ID': getDeviceId() };
+  if (accessToken) headers['Authorization'] = 'Bearer ' + accessToken;
+  let res = await fetch(API_URL + url, { ...options, headers });
+  if (res.status === 401 && refreshToken) {
+    const refreshRes = await fetch(API_URL + '/api/auth/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refreshToken }) });
+    if (refreshRes.ok) { const data = await refreshRes.json(); accessToken = data.accessToken; refreshToken = data.refreshToken; localStorage.setItem('accessToken', accessToken); localStorage.setItem('refreshToken', refreshToken); headers['Authorization'] = 'Bearer ' + accessToken; res = await fetch(API_URL + url, { ...options, headers }); }
+    else { localStorage.removeItem('accessToken'); localStorage.removeItem('refreshToken'); accessToken = null; refreshToken = null; nav('s-splash'); throw new Error('Sessão expirada'); }
+  }
+  if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || 'Erro na requisição'); }
+  return res.json();
+}
+
+function T(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2800); }
+
+let curScr = 's-splash';
+function nav(id) {
+  document.getElementById(curScr)?.classList.remove('on');
+  document.getElementById(id)?.classList.add('on');
+  curScr = id;
+  if (id === 's-map') { initMap(); updateEarnings(); startRequestPolling(); }
+  if (id === 's-earnings') renderEarnings();
+  if (id === 's-chat') renderChat();
+  if (id === 's-profile') updateProfileUI();
+}
+function goBack() { nav('s-map'); }
+
+// =============================================
+// UPLOAD DE DOCUMENTOS (NOVO)
+// =============================================
+async function uploadDocument(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const formData = new FormData();
+  formData.append('document', file);
+  try {
+    T('Enviando documento...');
+    const res = await fetch(API_URL + '/api/upload/document', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + accessToken },
+      body: formData
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('prev-doc').innerHTML = '<span style="color:var(--ok)">✅ Enviado</span>';
+      T('Documento enviado! Aguarde análise.');
+    } else { T('Erro ao enviar documento'); }
+  } catch(e) { T(e.message); }
+}
+
+async function uploadSelfie(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const formData = new FormData();
+  formData.append('selfie', file);
+  try {
+    T('Enviando selfie...');
+    const res = await fetch(API_URL + '/api/upload/selfie', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + accessToken },
+      body: formData
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('prev-selfie').innerHTML = '<span style="color:var(--ok)">✅ Enviado</span>';
+      T('Selfie enviada! Aguarde análise.');
+    } else { T('Erro ao enviar selfie'); }
+  } catch(e) { T(e.message); }
+}
+
+// =============================================
+// AUTENTICAÇÃO (REAL COM 2FA)
+// =============================================
+function escHtml(s) { return String(s).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+
+async function doRegister() {
+  const name = document.getElementById('rn')?.value || '';
+  const email = document.getElementById('re')?.value || '';
+  const password = document.getElementById('rpw')?.value || '';
+  const terms = document.getElementById('rt')?.checked || false;
+  const category = document.getElementById('rcat')?.value || '';
+  if (!name.trim()) { T('Digite seu nome'); return; }
+  if (!email.trim()) { T('Digite seu e-mail'); return; }
+  if (!password || password.length < 8) { T('Senha deve ter 8+ caracteres'); return; }
+  if (!/[A-Z]/.test(password)) { T('Senha precisa ter 1 letra maiúscula'); return; }
+  if (!/[0-9]/.test(password)) { T('Senha precisa ter 1 número'); return; }
+  if (!terms) { T('Aceite os termos'); return; }
+  try {
+    T('Cadastrando...');
+    const res = await apiFetch('/api/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password, role: 'prestador', category, deviceId: getDeviceId() }) });
+    if (res.accessToken) { accessToken = res.accessToken; refreshToken = res.refreshToken; localStorage.setItem('accessToken', accessToken); localStorage.setItem('refreshToken', refreshToken); currentUser = res.user; updateProfileUI(); T('Cadastro realizado! Aguarde aprovação.'); nav('s-pending'); }
+  } catch(e) { T(e.message); }
+}
+
+async function doLogin() {
+  const email = document.getElementById('le')?.value || '';
+  const password = document.getElementById('lp')?.value || '';
+  const code2fa = document.getElementById('code2fa')?.value || '';
+  
+  if (!email.trim()) { T('Digite seu e-mail'); return; }
+  if (!password) { T('Digite sua senha'); return; }
+  
+  if (pending2FA.required && !code2fa) {
+    T('Digite o código de autenticação de dois fatores');
+    return;
+  }
+  
+  try {
+    T('Entrando...');
+    const res = await apiFetch('/api/auth/login', { 
+      method: 'POST', 
+      body: JSON.stringify({ email, password, deviceId: getDeviceId(), code: code2fa }) 
+    });
+    
+    if (res.requires2FA) {
+      pending2FA = { required: true, userId: res.userId };
+      document.getElementById('div-2fa').style.display = 'block';
+      T('Código 2FA necessário. Verifique seu aplicativo autenticador.');
+      return;
+    }
+    
+    if (res.accessToken) {
+      if (res.user.role !== 'prestador') { await apiFetch('/api/auth/logout', { method: 'POST' }); throw new Error('Esta área é exclusiva para prestadores.'); }
+      accessToken = res.accessToken; refreshToken = res.refreshToken; localStorage.setItem('accessToken', accessToken); localStorage.setItem('refreshToken', refreshToken); currentUser = res.user;
+      pending2FA = { required: false, userId: null };
+      document.getElementById('div-2fa').style.display = 'none';
+      document.getElementById('code2fa').value = '';
+      updateProfileUI(); T('Bem-vinda!'); nav('s-map'); startRequestPolling();
+      connectWebSocket();
+    }
+  } catch(e) { T(e.message); }
+}
+
+async function doLogout() {
+  if (socket) socket.disconnect();
+  try { await apiFetch('/api/auth/logout', { method: 'POST' }); } catch(e) {}
+  accessToken = null; refreshToken = null; localStorage.removeItem('accessToken'); localStorage.removeItem('refreshToken'); if (_watchId) navigator.geolocation.clearWatch(_watchId); stopRequestPolling(); nav('s-splash');
+}
+
+window.blimGoToLogin = function() { nav('s-splash'); };
+window.addEventListener('blim:forced-logout', function(e) { T('📱 ' + (e.detail.message || 'Sessão encerrada em outro dispositivo.')); setTimeout(function() { nav('s-splash'); }, 2500); });
+
+function updateProfileUI() {
+  if (currentUser) {
+    const name = currentUser.name || 'Prestadora';
+    document.getElementById('prov-name').textContent = name;
+    document.getElementById('prov-avatar').textContent = name[0].toUpperCase();
+    document.getElementById('prof-name2').textContent = name;
+    document.getElementById('prof-av').textContent = name[0].toUpperCase();
+    document.getElementById('prof-email').textContent = currentUser.email || '';
+  }
+}
+
+// =============================================
+// RECUPERAÇÃO DE SENHA
+// =============================================
+let resetToken = null;
+
+async function forgotPassword() {
+  const email = document.getElementById('reset-email')?.value || '';
+  if (!email.trim()) { T('Digite seu e-mail'); return; }
+  try {
+    const res = await apiFetch('/api/password/forgot', { method: 'POST', body: JSON.stringify({ email }) });
+    T(res.message || 'Link enviado! Verifique seu e-mail.');
+    nav('s-login');
+  } catch(e) { T(e.message); }
+}
+
+function setResetToken(token) {
+  resetToken = token;
+  nav('s-reset-password');
+}
+
+async function submitResetPassword() {
+  const newPassword = document.getElementById('new-password')?.value || '';
+  const confirmPassword = document.getElementById('confirm-password')?.value || '';
+  if (!newPassword || newPassword.length < 8) { T('Senha deve ter 8+ caracteres'); return; }
+  if (newPassword !== confirmPassword) { T('As senhas não coincidem'); return; }
+  if (!resetToken) { T('Token inválido. Solicite um novo link.'); return; }
+  try {
+    const res = await apiFetch('/api/password/reset', { method: 'POST', body: JSON.stringify({ token: resetToken, password: newPassword }) });
+    T('Senha alterada com sucesso! Faça login.');
+    resetToken = null;
+    nav('s-login');
+  } catch(e) { T(e.message); }
+}
+
+// =============================================
+// 2FA (Autenticação de dois fatores)
+// =============================================
+async function load2FAStatus() {
+  if (!accessToken) { T('Faça login primeiro'); return; }
+  try {
+    const res = await apiFetch('/api/2fa/status');
+    if (res.enabled) {
+      document.getElementById('content-2fa').innerHTML = `
+        <div style="text-align:center;padding:20px">
+          <div style="font-size:48px;margin-bottom:20px">🔐</div>
+          <h2>2FA Ativado</h2>
+          <p style="color:var(--g5);margin:16px 0">Sua conta está protegida com autenticação de dois fatores.</p>
+          <button class="btn ber" onclick="disable2FA()">Desativar 2FA</button>
+          <button class="btn bpk" onclick="generateBackupCodes()">Gerar códigos de backup</button>
+        </div>
+      `;
+    } else {
+      document.getElementById('content-2fa').innerHTML = `
+        <div style="text-align:center;padding:20px">
+          <div style="font-size:48px;margin-bottom:20px">🔓</div>
+          <h2>2FA Desativado</h2>
+          <p style="color:var(--g5);margin:16px 0">Aumente a segurança da sua conta ativando a autenticação de dois fatores.</p>
+          <button class="btn bpk" onclick="setup2FA()">Ativar 2FA</button>
+        </div>
+      `;
+    }
+    nav('s-2fa');
+  } catch(e) { T(e.message); }
+}
+
+async function setup2FA() {
+  try {
+    const res = await apiFetch('/api/2fa/setup');
+    document.getElementById('content-2fa').innerHTML = `
+      <div style="text-align:center;padding:20px">
+        <h2>Configurar 2FA</h2>
+        <p>Escaneie o QR Code com Google Authenticator</p>
+        <img src="${res.qrCode}" style="width:200px;height:200px;margin:20px auto;display:block">
+        <p style="font-size:12px;color:var(--g5)">Ou digite manualmente: <strong>${res.secret}</strong></p>
+        <div class="iw"><label>Código de verificação</label><input class="inp" id="2fa-code" placeholder="000000"></div>
+        <button class="btn bpk" onclick="verify2FA()">Verificar e ativar</button>
+      </div>
+    `;
+  } catch(e) { T(e.message); }
+}
+
+async function verify2FA() {
+  const code = document.getElementById('2fa-code')?.value || '';
+  if (!code) { T('Digite o código de verificação'); return; }
+  try {
+    await apiFetch('/api/2fa/enable', { method: 'POST', body: JSON.stringify({ code }) });
+    T('2FA ativado com sucesso!');
+    load2FAStatus();
+  } catch(e) { T(e.message); }
+}
+
+async function disable2FA() {
+  const code = prompt('Digite o código do Google Authenticator para desativar o 2FA:');
+  if (!code) return;
+  try {
+    await apiFetch('/api/2fa/disable', { method: 'POST', body: JSON.stringify({ code }) });
+    T('2FA desativado!');
+    load2FAStatus();
+  } catch(e) { T(e.message); }
+}
+
+async function generateBackupCodes() {
+  try {
+    const res = await apiFetch('/api/2fa/backup-codes', { method: 'POST' });
+    let msg = 'Guarde seus códigos de backup:\n\n';
+    res.backupCodes.forEach((code, i) => { msg += `${i+1}. ${code}\n`; });
+    msg += '\nUse apenas uma vez caso perca acesso ao app autenticador.';
+    alert(msg);
+    T('Códigos de backup gerados! Verifique sua caixa de diálogo.');
+  } catch(e) { T(e.message); }
+}
+
+// =============================================
+// WEB SOCKET (CHAT EM TEMPO REAL)
+// =============================================
+function connectWebSocket() {
+  if (socket) socket.disconnect();
+  socket = io(API_URL, {
+    auth: { token: accessToken },
+    transports: ['websocket'],
+  });
+  socket.on('connect', () => { console.log('✅ WebSocket conectado'); });
+  socket.on('new-message', (message) => { addMessageToChat(message); });
+  socket.on('user-typing', (data) => { showTypingIndicator(data.userId, data.isTyping); });
+  socket.on('user-joined', (data) => { T(`💬 ${data.role === 'prestador' ? 'Prestador' : 'Cliente'} entrou no chat`); });
+  socket.on('user-left', (data) => { T(`👋 ${data.role === 'prestador' ? 'Prestador' : 'Cliente'} saiu do chat`); });
+}
+
+function addMessageToChat(message) {
+  const chatDiv = document.getElementById('chat-msgs');
+  if (!chatDiv) return;
+  const isMe = message.sender_id === currentUser?.id;
+  const time = new Date(message.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const msgHtml = `<div style="display:flex;flex-direction:column;align-items:${isMe ? 'flex-end' : 'flex-start'}">
+    <div class="msg-bubble msg-${isMe ? 'me' : 'them'}">${escHtml(message.text)}<div class="msg-time">${time}</div></div>
+  </div>`;
+  chatDiv.insertAdjacentHTML('beforeend', msgHtml);
+  chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+// =============================================
+// CATEGORIAS
+// =============================================
+const CATS = ['Encanamento','Elétrica','Reforma','Limpeza','Ar-condicionado','Jardinagem','Pet','TI','Design','Mudança','Chaveiro','Gastronomia','Bem-estar','Construção','Fotografia','Aulas','Serralheria','Marcenaria','Hidráulica','Eventos','Gás','Piscinas','Segurança','Terraplanagem','Costura','Tecnologia','Saúde Casa','Antenas/TV','Personal','Despachante','Jurídico','Contabilidade','Mecânica'];
+
+// =============================================
+// MAPA
+// =============================================
+function initMap() {
+  if (typeof L === 'undefined') { setTimeout(initMap, 200); return; }
+  if (_map) { setTimeout(function() { if (_map) _map.invalidateSize(); }, 100); return; }
+  if (!navigator.geolocation) { buildMap(ST.lat, ST.lng); return; }
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    ST.lat = pos.coords.latitude; ST.lng = pos.coords.longitude;
+    buildMap(ST.lat, ST.lng);
+    startWatch();
+  }, function() { buildMap(ST.lat, ST.lng); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+}
+
+function buildMap(lat, lng) {
+  if (_map) return;
+  const m = L.map('map-prov', { zoomControl: false, attributionControl: true });
+  m.setView([lat, lng], 16);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap', subdomains: 'abcd', maxZoom: 20 }).addTo(m);
+  L.control.zoom({ position: 'topright' }).addTo(m);
+  const meIcon = L.divIcon({ className: '', html: '<div style="width:24px;height:24px;background:#FF2D78;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 4px rgba(255,45,120,.25),0 2px 12px rgba(255,45,120,.6)"></div>', iconSize: [24, 24], iconAnchor: [12, 12] });
+  _myMarker = L.marker([lat, lng], { icon: meIcon }).addTo(m).bindPopup('🛠️ Você está aqui').openPopup();
+  _map = m;
+  setTimeout(function() { if (m) { m.invalidateSize(); m.setView([lat, lng], 16); } }, 300);
+  updateLocLabel(lat, lng);
+}
+
+function startWatch() {
+  if (_watchId !== null) return;
+  _watchId = navigator.geolocation.watchPosition(function(pos) {
+    ST.lat = pos.coords.latitude; ST.lng = pos.coords.longitude;
+    if (_myMarker) _myMarker.setLatLng([ST.lat, ST.lng]);
+    if (_map && online && !currentRequest) _map.panTo([ST.lat, ST.lng], { animate: true, duration: .8 });
+  }, function() {}, { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 });
+}
+
+function updateLocLabel(lat, lng) {
+  fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&accept-language=pt-BR')
+    .then(function(r) { return r.json(); }).then(function(d) {
+      const a = d.address || {};
+      const el = document.getElementById('prov-loc');
+      if (el) el.textContent = '📍 ' + (a.road || a.suburb || a.neighbourhood || 'Localização atual');
+    }).catch(function() {});
+}
+
+function toggleOnline() {
+  online = !online;
+  const tgl = document.getElementById('tgl-online');
+  const lbl = document.getElementById('online-lbl');
+  const sub = document.getElementById('online-sub');
+  const ms = document.getElementById('map-status');
+  if (tgl) tgl.classList.toggle('on', online);
+  if (tgl) tgl.classList.toggle('off', !online);
+  if (online) {
+    if (lbl) { lbl.style.color = 'var(--ok)'; lbl.textContent = '● Online'; }
+    if (sub) sub.textContent = 'Recebendo solicitações';
+    if (ms) ms.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;gap:8px"><div class="sp"></div><span>Aguardando solicitações...</span></div>';
+    T('🟢 Você está online!');
+    startRequestPolling();
+  } else {
+    if (lbl) { lbl.style.color = 'var(--er)'; lbl.textContent = '● Offline'; }
+    if (sub) sub.textContent = 'Você não receberá solicitações';
+    if (ms) ms.innerHTML = '<div style="font-size:14px;color:var(--er);font-weight:600">🔴 Offline — ative para receber pedidos</div>';
+    T('🔴 Você está offline');
+  }
+}
+
+// =============================================
+// NOTIFICAÇÃO (REAL)
+// =============================================
+function showNotification(reqId, data) {
+  if (!online) return;
+  currentRequest = { id: reqId, ...data };
+  document.getElementById('req-svc').textContent = data.servico || 'Serviço';
+  document.getElementById('req-cat').textContent = '';
+  document.getElementById('req-price').textContent = data.preco || 'R$ —';
+  document.getElementById('req-addr').textContent = data.enderecoFull || '—';
+  document.getElementById('req-client').textContent = data.clienteNome || 'Cliente';
+  document.getElementById('req-pay').textContent = data.pagamento || '—';
+  if (data.lat && data.lng && ST.lat && ST.lng) {
+    const dist = calcDist(ST.lat, ST.lng, data.lat, data.lng);
+    document.getElementById('req-dist').textContent = dist.toFixed(1);
+  } else {
+    document.getElementById('req-dist').textContent = '—';
+  }
+  document.getElementById('notif-bg').classList.add('on');
+  startNotifSound();
+  startNotifCountdown();
+}
+
+function calcDist(la1, ln1, la2, ln2) {
+  const R = 6371, dLa = (la2 - la1) * Math.PI / 180, dLn = (ln2 - ln1) * Math.PI / 180;
+  const a = Math.sin(dLa / 2) * Math.sin(dLa / 2) + Math.cos(la1 * Math.PI / 180) * Math.cos(la2 * Math.PI / 180) * Math.sin(dLn / 2) * Math.sin(dLn / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function startNotifSound() {
+  stopNotifSound();
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    function beep() {
+      for (let i = 0; i < 4; i++) {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.type = 'sine'; o.frequency.value = 880;
+        const t = ctx.currentTime + i * .4;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.3, t + .05);
+        g.gain.setValueAtTime(.3, t + .2); g.gain.linearRampToValueAtTime(0, t + .3);
+        o.start(t); o.stop(t + .35);
+      }
+    }
+    beep();
+    _soundLoop = setInterval(beep, 30000);
+  } catch (e) { }
+}
+function stopNotifSound() { if (_soundLoop) { clearInterval(_soundLoop); _soundLoop = null; } }
+
+function startNotifCountdown() {
+  let sec = 30;
+  const el = document.getElementById('notif-timer');
+  if (el) el.textContent = sec;
+  clearInterval(_countdownIv);
+  _countdownIv = setInterval(function() {
+    sec--;
+    if (el) el.textContent = sec;
+    if (sec <= 0) { clearInterval(_countdownIv); recusar(); }
+  }, 1000);
+}
+function stopNotifCountdown() { clearInterval(_countdownIv); }
+
+function recusar() {
+  stopNotifSound(); stopNotifCountdown();
+  document.getElementById('notif-bg').classList.remove('on');
+  const reqId = currentRequest ? currentRequest.id : null;
+  currentRequest = null;
+  if (reqId && accessToken) {
+    apiFetch('/api/requests/' + reqId + '/status', { method: 'PUT', body: JSON.stringify({ status: 'cancelado' }) }).catch(function() {});
+  }
+  T('Solicitação recusada');
+  _setChatVisible(false);
+}
+
+async function aceitar() {
+  stopNotifSound(); stopNotifCountdown();
+  document.getElementById('notif-bg').classList.remove('on');
+  if (!currentRequest) return;
+  const reqId = currentRequest.id;
+  const clienteNome = currentRequest.clienteNome || currentRequest.description || 'Cliente';
+  const endFull = currentRequest.enderecoFull || currentRequest.endereco || currentRequest.addr || '—';
+  const preco = currentRequest.preco || currentRequest.valor || currentRequest.value || 'R$ —';
+  document.getElementById('svc-client-name').textContent = escHtml(clienteNome);
+  document.getElementById('svc-addr').textContent = escHtml(endFull);
+  document.getElementById('step-price').textContent = escHtml(preco);
+  document.getElementById('chat-name').textContent = escHtml(clienteNome);
+  _setupMapsButton(endFull, currentRequest.lat, currentRequest.lng);
+  _setChatVisible(true);
+  if (reqId && accessToken) {
+    await apiFetch('/api/requests/' + reqId + '/status', { method: 'PUT', body: JSON.stringify({ status: 'aceito' }) }).catch(function(e) { T('⚠️ Erro ao confirmar: ' + e.message); });
+  }
+  _chatMsgs = [];
+  if (_chatPollTimer) clearInterval(_chatPollTimer);
+  if (reqId) {
+    _loadChatMessages(reqId);
+    _chatPollTimer = setInterval(function() { if (currentRequest && currentRequest.id) _loadChatMessages(currentRequest.id); }, 5000);
+  }
+  currentStep = 0;
+  renderStep();
+  nav('s-service');
+  T('✅ Pedido aceito! Dirija-se ao cliente');
+  connectWebSocket();
+  if (socket) socket.emit('join-request', { requestId: reqId });
+}
+
+function _setChatVisible(visible) {
+  const chatNavItem = document.getElementById('nav-chat-item');
+  if (chatNavItem) { chatNavItem.style.opacity = visible ? '1' : '0.3'; chatNavItem.style.pointerEvents = visible ? 'auto' : 'none'; }
+  const dot = document.getElementById('chat-dot');
+  if (dot) dot.style.display = 'none';
+}
+
+function _onChatNavClick() { if (!currentRequest || !currentRequest.id) { T('💬 Chat disponível apenas durante um atendimento ativo'); return; } nav('s-chat'); }
+
+// =============================================
+// MAPAS (navegação)
+// =============================================
+function _setupMapsButton(endFull, lat, lng) {
+  const mBtn = document.getElementById('maps-btn');
+  const mAddr = document.getElementById('maps-addr');
+  if (!mBtn) return;
+  if (endFull || (lat && lng)) { mBtn.style.display = 'flex'; if (mAddr) mAddr.textContent = endFull || lat + ', ' + lng; }
+  else { mBtn.style.display = 'none'; }
+  ST._mapsLat = lat; ST._mapsLng = lng; ST._mapsAddr = endFull;
+}
+
+function openMaps() {
+  const lat = ST._mapsLat || (currentRequest && currentRequest.lat);
+  const lng = ST._mapsLng || (currentRequest && currentRequest.lng);
+  const addr = ST._mapsAddr || (currentRequest && (currentRequest.enderecoFull || currentRequest.addr || currentRequest.endereco));
+  const pref = ST.mapApp || 'google';
+  if (!lat && !addr) { T('📍 Endereço não disponível'); return; }
+  let gOrigin = '';
+  if (ST.lat && ST.lng) gOrigin = ST.lat + ',' + ST.lng;
+  const urls = {
+    google: lat ? 'https://www.google.com/maps/dir/?api=1' + (gOrigin ? '&origin=' + gOrigin : '') + '&destination=' + lat + ',' + lng + '&travelmode=driving' : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(addr),
+    waze: lat ? 'https://waze.com/ul?ll=' + lat + ',' + lng + '&navigate=yes' + (gOrigin ? '&from=' + gOrigin : '') : 'https://waze.com/ul?q=' + encodeURIComponent(addr) + '&navigate=yes',
+  };
+  const url = urls[pref] || urls.google;
+  window.open(url, '_blank');
+}
+
+function openMapsChoice() {
+  const bg = document.createElement('div');
+  bg.id = 'maps-choice-sheet';
+  bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:8000;display:flex;align-items:flex-end;';
+  bg.innerHTML = '<div style="background:#fff;border-radius:28px 28px 0 0;padding:24px 24px 44px;width:100%"><div style="width:40px;height:4px;background:var(--g8);border-radius:2px;margin:0 auto 20px"></div><div style="font-size:17px;font-weight:800;margin-bottom:18px;text-align:center">Abrir endereço em</div><div style="display:flex;flex-direction:column;gap:10px"><button onclick="window._chooseMaps(\'google\')" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--g10);border:none;border-radius:var(--r);width:100%;font-family:var(--f);cursor:pointer;font-size:15px;font-weight:700;color:var(--dk)"><span style="font-size:28px">🗺️</span> Google Maps ' + (ST.mapApp === 'google' ? '<span style="margin-left:auto;color:var(--ok);font-size:18px">✓</span>' : '') + '</button><button onclick="window._chooseMaps(\'waze\')" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--g10);border:none;border-radius:var(--r);width:100%;font-family:var(--f);cursor:pointer;font-size:15px;font-weight:700;color:var(--dk)"><span style="font-size:28px">🔵</span> Waze ' + (ST.mapApp === 'waze' ? '<span style="margin-left:auto;color:var(--ok);font-size:18px">✓</span>' : '') + '</button><button onclick="this.closest(\'#maps-choice-sheet\').remove()" style="padding:16px;background:none;border:none;font-family:var(--f);font-size:15px;font-weight:600;color:var(--g5);cursor:pointer;text-align:center;width:100%">Cancelar</button></div></div>';
+  document.body.appendChild(bg);
+}
+
+function _updateMapPrefLabel() {
+  const lbl = document.getElementById('map-pref-label');
+  const btn = document.getElementById('maps-btn-label');
+  const name = ST.mapApp === 'waze' ? 'Waze' : 'Google Maps';
+  if (lbl) lbl.textContent = name;
+  if (btn) btn.textContent = 'Abrir no ' + name;
+}
+
+function openMapPrefSheet() {
+  const bg = document.createElement('div');
+  bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:8000;display:flex;align-items:flex-end;';
+  bg.innerHTML = '<div style="background:#fff;border-radius:28px 28px 0 0;padding:24px 24px 44px;width:100%"><div style="width:40px;height:4px;background:var(--g8);border-radius:2px;margin:0 auto 20px"></div><div style="font-size:17px;font-weight:800;margin-bottom:6px;text-align:center">App de navegação</div><div style="font-size:13px;color:var(--g5);text-align:center;margin-bottom:20px">Escolha o app padrão para abrir rotas</div><div style="display:flex;flex-direction:column;gap:10px"><button onclick="window._setMapPref(\'google\',this.closest(\'div\').parentElement.parentElement)" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--g10);border:none;border-radius:var(--r);width:100%;font-family:var(--f);cursor:pointer;font-size:15px;font-weight:700;color:var(--dk)"><span style="font-size:28px">🗺️</span> <span style="flex:1;text-align:left">Google Maps</span><span style="color:var(--ok);font-size:18px" id="pref-check-google">' + (ST.mapApp === 'google' ? '✓' : '') + '</span></button><button onclick="window._setMapPref(\'waze\',this.closest(\'div\').parentElement.parentElement)" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--g10);border:none;border-radius:var(--r);width:100%;font-family:var(--f);cursor:pointer;font-size:15px;font-weight:700;color:var(--dk)"><span style="font-size:28px">🔵</span> <span style="flex:1;text-align:left">Waze</span><span style="color:var(--ok);font-size:18px" id="pref-check-waze">' + (ST.mapApp === 'waze' ? '✓' : '') + '</span></button><button onclick="this.parentElement.parentElement.parentElement.remove()" style="padding:16px;background:none;border:none;font-family:var(--f);font-size:15px;font-weight:600;color:var(--g5);cursor:pointer;text-align:center;width:100%">Cancelar</button></div></div>';
+  document.body.appendChild(bg);
+}
+
+window._setMapPref = function(app, sheet) { ST.mapApp = app; localStorage.setItem('blim_mapApp', app); _updateMapPrefLabel(); T('✅ ' + (app === 'waze' ? 'Waze' : 'Google Maps') + ' definido como padrão'); if (sheet) sheet.remove(); };
+window._chooseMaps = function(app) { ST.mapApp = app; localStorage.setItem('blim_mapApp', app); _updateMapPrefLabel(); const sheet = document.getElementById('maps-choice-sheet'); if (sheet) sheet.remove(); openMaps(); };
+
+// =============================================
+// ETAPAS DO SERVIÇO
+// =============================================
+const STEPS = [
+  { icon: '🚗', title: 'A caminho', desc: 'Dirija-se ao endereço do cliente', btn: 'Cheguei ao cliente →' },
+  { icon: '📍', title: 'Chegou ao cliente', desc: 'Confirme com a cliente sua chegada', btn: 'Iniciar serviço →' },
+  { icon: '🔧', title: 'Serviço em andamento', desc: 'Execute o serviço com qualidade', btn: 'Finalizar serviço →' },
+  { icon: '✅', title: 'Serviço concluído!', desc: 'Aguardando confirmação da cliente', btn: 'Ver meus ganhos →' }
+];
+
+function renderStep() {
+  const s = STEPS[currentStep];
+  document.getElementById('step-icon').textContent = s.icon;
+  document.getElementById('step-title').textContent = s.title;
+  document.getElementById('step-desc').textContent = s.desc;
+  document.getElementById('step-btn').textContent = s.btn;
+  document.getElementById('step-num').textContent = currentStep + 1;
+  const dots = document.getElementById('step-dots');
+  if (dots) { dots.innerHTML = STEPS.map(function(_, i) { return '<div class="step-dot' + (i <= currentStep ? ' on' : '') + '" style="width:' + (i === currentStep ? '24px' : '8px') + '"></div>'; }).join(''); }
+}
+
+async function nextStep() {
+  if (currentStep < STEPS.length - 1) {
+    currentStep++;
+    renderStep();
+    const msgs = ['🚗 A caminho!', '📍 Chegou! Inicie o serviço', '🔧 Em andamento!', '✅ Finalizado!'];
+    T(msgs[currentStep]);
+    const statusMap = ['a_caminho', 'iniciado', 'iniciado', 'finalizado'];
+    if (currentRequest && currentRequest.id && accessToken) {
+      await apiFetch('/api/requests/' + currentRequest.id + '/status', { method: 'PUT', body: JSON.stringify({ status: statusMap[currentStep] }) }).catch(function() {});
+    }
+    if (currentStep === STEPS.length - 1) setTimeout(function() { showRate(); }, 1200);
+  }
+}
+
+function showRate() {
+  if (currentRequest && (currentRequest.preco || currentRequest.value)) {
+    const raw = (currentRequest.preco || currentRequest.value || '150').replace('R$ ', '').replace('R$', '').replace(/\./g, '').split('–')[0].trim();
+    const val = parseInt(raw.replace(/\D/g, '')) || 150;
+    const earn = Math.round(val * .85);
+    document.getElementById('earn-final').textContent = 'R$ ' + earn;
+    ST.earnings.today += earn; ST.earnings.week += earn; ST.earnings.month += earn; ST.earnings.svcs++;
+    updateEarnings();
+  }
+  _endChat();
+  nav('s-rate');
+}
+
+function _endChat() {
+  if (_chatPollTimer) { clearInterval(_chatPollTimer); _chatPollTimer = null; }
+  _chatMsgs = [];
+  _setChatVisible(false);
+  const wrap = document.getElementById('chat-msgs');
+  if (wrap) wrap.innerHTML = '<div style="text-align:center;padding:20px 0;font-size:13px;color:var(--g6);font-weight:500">Início da conversa</div>';
+}
+
+async function finalizarAvaliacao() {
+  const reqId = currentRequest ? currentRequest.id : null;
+  if (reqId && accessToken) { await apiFetch('/api/requests/' + reqId + '/status', { method: 'PUT', body: JSON.stringify({ status: 'finalizado' }) }).catch(function() {}); }
+  currentRequest = null;
+  _endChat();
+  nav('s-map');
+  T('💖 Obrigada! Ganhos atualizados.');
+}
+
+function setStars(n) { document.querySelectorAll('#rstars .rs').forEach(function(s, i) { s.textContent = i < n ? '★' : '☆'; s.classList.toggle('on', i < n); }); }
+
+// =============================================
+// CHAT
+// =============================================
+function renderChat() {
+  const wrap = document.getElementById('chat-msgs');
+  if (!wrap) return;
+  const myId = currentUser?.id || 'me';
+  let html = '<div style="text-align:center;padding:16px 0;font-size:13px;color:var(--g6);font-weight:500">Início da conversa</div>';
+  _chatMsgs.forEach(function(m) {
+    const isMe = m.sender_id === myId || m.from === 'me' || m.from === myId;
+    const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+    html += '<div style="display:flex;flex-direction:column;align-items:' + (isMe ? 'flex-end' : 'flex-start') + '">' +
+      '<div class="msg-bubble msg-' + (isMe ? 'me' : 'them') + '">' +
+      escHtml(m.text || m.msg || '') +
+      '<div class="msg-time">' + time + '</div></div></div>';
+  });
+  wrap.innerHTML = html;
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+async function _loadChatMessages(requestId) {
+  if (!requestId || !accessToken) return;
+  try {
+    const msgs = await apiFetch('/api/messages/' + requestId);
+    _chatMsgs = msgs;
+    renderChat();
+  } catch (e) { }
+}
+
+function sendMsg() {
+  const inp = document.getElementById('chat-inp');
+  const text = (inp.value || '').trim();
+  if (!text) return;
+  inp.value = '';
+  autoResize(inp);
+  const optimistic = { sender_id: currentUser?.id || 'me', sender_name: 'Você', text: text, created_at: new Date().toISOString() };
+  _chatMsgs.push(optimistic);
+  renderChat();
+  if (accessToken && currentRequest && currentRequest.id) {
+    if (socket && socket.connected) {
+      socket.emit('send-message', { requestId: currentRequest.id, text: text, tempId: Date.now().toString() });
+    } else {
+      apiFetch('/api/messages', { method: 'POST', body: JSON.stringify({ requestId: currentRequest.id, text: text }) }).catch(function(e) {
+        T('⚠️ Mensagem não enviada: ' + e.message);
+        _chatMsgs = _chatMsgs.filter(function(m) { return m !== optimistic; });
+        renderChat();
+      });
+    }
+  }
+}
+
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 100) + 'px'; }
+
+// =============================================
+// GANHOS
+// =============================================
+function updateEarnings() {
+  const fmt = function(v) { return 'R$' + v; };
+  const e = ST.earnings;
+  ['earn-today', 'earn-today2'].forEach(function(id) { const el = document.getElementById(id); if (el) el.textContent = fmt(e.today); });
+  ['earn-week', 'earn-week2'].forEach(function(id) { const el = document.getElementById(id); if (el) el.textContent = fmt(e.week); });
+  const em = document.getElementById('earn-month'); if (em) em.textContent = fmt(e.month);
+  const ec = document.getElementById('earn-count'); if (ec) ec.textContent = e.svcs;
+  const psm = document.getElementById('ps-month'); if (psm) psm.textContent = fmt(e.month);
+  const pss = document.getElementById('ps-svcs'); if (pss) pss.textContent = e.svcs;
+}
+
+function renderEarnings() {
+  updateEarnings();
+  const el = document.getElementById('earn-list'); if (!el) return;
+  if (ST.earnings.svcs === 0) { el.innerHTML = '<div style="text-align:center;color:var(--g5);padding:32px;font-size:14px">Nenhum serviço realizado ainda</div>'; return; }
+  el.innerHTML = Array.from({ length: ST.earnings.svcs }, function(_, i) {
+    return '<div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:.5px solid var(--g10)">' +
+      '<div style="width:44px;height:44px;border-radius:var(--r);background:var(--pks);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🔧</div>' +
+      '<div style="flex:1"><div style="font-size:14px;font-weight:700">Serviço ' + (i + 1) + '</div><div style="font-size:12px;color:var(--g5);margin-top:2px">Hoje · R$150</div></div>' +
+      '<div style="font-size:14px;font-weight:700;color:var(--ok)">+R$' + Math.round(150 * .85) + '</div></div>';
+  }).join('');
+}
+
+// =============================================
+// POLLING DE SOLICITAÇÕES
+// =============================================
+function startRequestPolling() {
+  stopRequestPolling();
+  requestPolling = setInterval(async function() {
+    if (!accessToken || !online) return;
+    try {
+      const reqs = await apiFetch('/api/requests');
+      const pending = reqs.filter(function(r) { return r.status === 'aguardando' && !r.provider_id; });
+      if (pending.length > 0 && (!document.getElementById('notif-bg') || !document.getElementById('notif-bg').classList.contains('on'))) {
+        const r = pending[0];
+        showNotification(r.id, {
+          servico: r.category,
+          preco: r.value,
+          enderecoFull: r.address,
+          clienteNome: r.client_name,
+          pagamento: r.payment_method,
+          lat: r.lat,
+          lng: r.lng
+        });
+      }
+    } catch (e) { }
+  }, 10000);
+}
+function stopRequestPolling() { if (requestPolling) { clearInterval(requestPolling); requestPolling = null; } }
+
+// =============================================
+// INICIALIZAÇÃO
+// =============================================
+document.addEventListener('DOMContentLoaded', function() {
+  const sel = document.getElementById('rcat');
+  if (sel && CATS && CATS.length) { CATS.forEach(function(c) { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); }); }
+  if (accessToken) {
+    apiFetch('/api/auth/check-session').then(function(res) {
+      if (res.valid) { currentUser = res.user; updateProfileUI(); nav('s-map'); startRequestPolling(); connectWebSocket(); }
+    }).catch(function() {});
+  }
+  _updateMapPrefLabel();
+  
+  // Verificar se há token na URL (para reset de senha)
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  if (token) {
+    setResetToken(token);
+  }
+});
+</script>
+</body>
+</html>

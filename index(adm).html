@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<!-- 🔴 LOCAL 1 - COLE SUA URL DO BACKEND AQUI 🔴 -->
+<meta name="blim-api" content="https://🔴COLE_AQUI_A_URL_DO_BACKEND🔴">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="googlebot" content="noindex,nofollow">
+<title>BLIM — Admin</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ========== SEU CSS ORIGINAL DO ADMIN COMPLETO - MANTIDO ÍNTEGRO ========== */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --pk:#FF2D78;--pk2:#FF6B9D;--pks:#FFF0F5;
+  --dk:#1C1C1E;--g4:#636366;--g5:#8E8E93;--g6:#AEAEB2;
+  --g7:#C7C7CC;--g8:#D1D1D6;--g9:#E5E5EA;--g10:#F2F2F7;
+  --ok:#34C759;--er:#FF3B30;--wa:#FF9500;--in:#007AFF;
+  --r:14px;--rl:20px;--rx:26px;--rf:999px;
+  --f:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+html,body{height:100%;overflow:hidden;background:#0A0A0F}
+body{font-family:var(--f);color:var(--dk);-webkit-font-smoothing:antialiased}
+#app{display:none;max-width:430px;margin:0 auto;height:100vh;background:#fff;position:relative;overflow:hidden}
+#app.unlocked{display:block}
+#lockscreen{position:fixed;inset:0;background:#0A0A0F;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;color:#fff;text-align:center;padding:32px}
+#lockscreen.hidden{display:none}
+.lock-logo{font-size:48px;margin-bottom:16px;animation:lkp 3s ease-in-out infinite}
+@keyframes lkp{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.lock-title{font-size:28px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--pk),var(--pk2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.lock-sub{font-size:14px;color:rgba(255,255,255,.4);font-weight:500;margin-bottom:48px}
+.lf-wrap{width:100%;max-width:340px}
+.lf-inp{width:100%;padding:16px 18px;margin-bottom:12px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-radius:14px;font-family:var(--f);font-size:16px;color:#fff;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.lf-inp:focus{border-color:var(--pk);background:rgba(255,255,255,.1)}
+.lf-inp::placeholder{color:rgba(255,255,255,.3)}
+.lf-btn{width:100%;padding:17px;border:none;border-radius:var(--rf);background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;font-family:var(--f);font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(255,45,120,.4);transition:all .15s;margin-top:4px}
+.lf-btn:active{transform:scale(.97)}
+.lf-err{background:rgba(255,59,48,.15);border:1px solid rgba(255,59,48,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:#FF6B6B;font-weight:600;margin-bottom:12px;display:none}
+.lf-err.on{display:block}
+.lf-loading{text-align:center;padding:16px;color:rgba(255,255,255,.5);font-size:14px;display:none}
+.lf-loading.on{display:block}
+.lf-spin{width:24px;height:24px;border:2.5px solid rgba(255,45,120,.3);border-top-color:var(--pk);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto 8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.session-bar{background:rgba(52,199,89,.15);border-bottom:1px solid rgba(52,199,89,.2);padding:8px 16px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ok);flex-shrink:0}
+.session-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:blink 1s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--g10);transform:translateX(100%);transition:transform .38s cubic-bezier(.32,.72,0,1);z-index:1;overflow:hidden}
+.scr.on{transform:translateX(0);z-index:10}
+.sb{height:max(34px,env(safe-area-inset-bottom));flex-shrink:0}
+.sc{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.sc::-webkit-scrollbar{display:none}
+.sb-ov{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:900;opacity:0;pointer-events:none;transition:opacity .3s}
+.sb-ov.on{opacity:1;pointer-events:all}
+.sidebar{position:absolute;left:0;top:0;bottom:0;width:264px;background:linear-gradient(180deg,#0F0F1A 0%,#1A0A1A 100%);z-index:950;transform:translateX(-100%);transition:transform .35s cubic-bezier(.32,.72,0,1);overflow-y:auto;display:flex;flex-direction:column}
+.sidebar.on{transform:translateX(0)}
+.sidebar::-webkit-scrollbar{display:none}
+.sb-head{padding:40px 20px 24px;border-bottom:.5px solid rgba(255,255,255,.08)}
+.sb-logo{font-size:30px;font-weight:800;background:linear-gradient(135deg,var(--pk),var(--pk2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1px}
+.sb-sub{font-size:11px;color:rgba(255,255,255,.35);font-weight:600;margin-top:3px;letter-spacing:.5px;text-transform:uppercase}
+.sb-admin{display:flex;align-items:center;gap:8px;margin-top:12px;padding:8px 12px;background:rgba(255,45,120,.12);border-radius:10px;border:1px solid rgba(255,45,120,.2)}
+.sb-admin-email{font-size:12px;color:rgba(255,255,255,.6);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-sec{padding:14px 20px 6px;font-size:10px;font-weight:700;color:rgba(255,255,255,.2);letter-spacing:1.5px;text-transform:uppercase}
+.sb-item{display:flex;align-items:center;gap:12px;padding:13px 20px;cursor:pointer;transition:background .2s;font-size:14px;font-weight:600;color:rgba(255,255,255,.6)}
+.sb-item:hover,.sb-item.on{background:rgba(255,45,120,.15);color:#fff}
+.sb-item.on{border-left:3px solid var(--pk)}
+.sb-ic{font-size:18px;width:24px;text-align:center;flex-shrink:0}
+.sb-logout{color:rgba(255,100,100,.7)!important;margin-top:8px}
+.tb{padding:14px 20px 10px;display:flex;align-items:center;gap:12px;flex-shrink:0;background:#fff;border-bottom:.5px solid var(--g9)}
+.tt{flex:1;font-size:17px;font-weight:700;text-align:center}
+.mb{width:38px;height:38px;border-radius:var(--rf);background:var(--g10);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ph{width:38px}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 16px 4px}
+.sc2{background:#fff;border-radius:var(--rl);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.07);border:.5px solid var(--g9)}
+.sv{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.sk{font-size:12px;color:var(--g5);font-weight:600;margin-top:4px}
+.st{font-size:12px;font-weight:600;margin-top:6px}
+.lc{background:#fff;border-radius:var(--rl);margin:0 16px 12px;box-shadow:0 1px 4px rgba(0,0,0,.07);border:.5px solid var(--g9);overflow:hidden}
+.ch{padding:16px 16px 12px;font-size:15px;font-weight:800;border-bottom:.5px solid var(--g9);display:flex;align-items:center;justify-content:space-between}
+.ur{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:.5px solid var(--g10)}
+.ur:last-child{border-bottom:none}
+.uav{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0}
+.un{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.us{font-size:12px;color:var(--g5);margin-top:1px}
+.uacts{display:flex;gap:5px;flex-shrink:0}
+.ab{padding:6px 10px;border:none;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--f)}
+.ab:active{transform:scale(.95)}
+.aok{background:#E8F8EF;color:var(--ok)}
+.aer{background:#FFE5E5;color:var(--er)}
+.ain{background:#E5F0FF;color:var(--in)}
+.awa{background:#FFF3E0;color:var(--wa)}
+.bd{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--rf);font-size:11px;font-weight:700}
+.bgk{background:#E8F8EF;color:var(--ok)}
+.bwn{background:#FFF3E0;color:var(--wa)}
+.ber2{background:#FFE5E5;color:var(--er)}
+.bin{background:#E5F0FF;color:var(--in)}
+.bpk{background:var(--pks);color:var(--pk)}
+.bgy{background:var(--g10);color:var(--g4)}
+.inp{width:100%;padding:14px 16px;background:var(--g9);border:1.5px solid transparent;border-radius:10px;font-family:var(--f);font-size:15px;color:var(--dk);outline:none;transition:all .2s;-webkit-appearance:none}
+.inp:focus{background:#fff;border-color:var(--pk);box-shadow:0 0 0 4px rgba(255,45,120,.08)}
+textarea.inp{resize:none;height:90px;line-height:1.5}
+.iw{margin-bottom:12px}
+.iw label{display:block;font-size:12px;font-weight:600;color:var(--g4);margin-bottom:5px;padding-left:2px}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;padding:16px;border:none;border-radius:var(--rf);font-family:var(--f);font-size:16px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn:active{transform:scale(.97)}
+.bpk2{background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;box-shadow:0 4px 20px rgba(255,45,120,.35)}
+.bgk2{background:linear-gradient(135deg,var(--ok),#30D158);color:#fff;box-shadow:0 4px 16px rgba(52,199,89,.3)}
+.ber3{background:linear-gradient(135deg,var(--er),#FF6B6B);color:#fff}
+.bgh{background:var(--g10);color:var(--dk)}
+.bsm{padding:8px 14px;font-size:13px;border-radius:10px;width:auto}
+#map-live{width:100%;height:220px;flex-shrink:0}
+.leaflet-control-zoom{border:none!important;border-radius:12px!important;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.15)!important}
+.leaflet-control-zoom a{width:40px!important;height:40px!important;line-height:40px!important;font-size:20px!important;font-weight:800!important;color:var(--pk)!important;background:#fff!important;border:none!important}
+.tgl{width:44px;height:24px;background:var(--g9);border-radius:var(--rf);position:relative;cursor:pointer;transition:background .3s;flex-shrink:0}
+.tgl.on{background:var(--ok)}
+.tgl-k{position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:2px;left:2px;transition:left .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.tgl.on .tgl-k{left:22px}
+.modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:980;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-bg.on{opacity:1;pointer-events:all}
+.modal-sheet{background:#fff;border-radius:28px 28px 0 0;padding:24px 24px 40px;width:100%;transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1);max-height:88vh;overflow-y:auto}
+.modal-bg.on .modal-sheet{transform:translateY(0)}
+.to-warn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(255,149,0,.95);color:#fff;padding:12px 20px;border-radius:var(--rf);font-size:13px;font-weight:700;z-index:9999;display:none;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(255,149,0,.4)}
+.to-warn.on{display:block}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(28,28,30,.92);backdrop-filter:blur(10px);color:#fff;padding:12px 22px;border-radius:var(--rf);font-size:14px;font-weight:600;z-index:9999;opacity:0;transition:all .32s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.panel{display:none;flex:1;flex-direction:column;overflow:hidden}
+.panel.on{display:flex}
+</style>
+</head>
+<body>
+
+<!-- LOCKSCREEN -->
+<div id="lockscreen">
+  <div class="lock-logo">🔐</div>
+  <div class="lock-title">Área Restrita</div>
+  <div class="lock-sub">Acesso exclusivo para administradores BLIM</div>
+  <div class="lf-wrap">
+    <div class="lf-err" id="lf-err">E-mail ou senha incorretos</div>
+    <div class="lf-loading" id="lf-load"><div class="lf-spin"></div>Verificando credenciais...</div>
+    <div id="lf-form">
+      <input class="lf-inp" id="adm-email" type="email" placeholder="E-mail do administrador" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('adm-pass').focus()">
+      <input class="lf-inp" id="adm-pass" type="password" placeholder="Senha" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdminLogin()">
+      <!-- Campo 2FA (aparece se precisar) -->
+      <div id="div-2fa" style="display:none" class="iw"><input class="lf-inp" id="code2fa" type="text" placeholder="Código de verificação (2FA)"></div>
+      <button class="lf-btn" onclick="doAdminLogin()">Acessar painel seguro →</button>
+      <div style="margin-top:20px;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;text-align:center">
+        <div style="font-size:12px;color:rgba(255,255,255,.2);line-height:1.6">🔒 Acesso restrito · BLIM Admin<br>Contate o responsável técnico para obter acesso.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<div class="toast" id="toast"></div>
+<div class="to-warn" id="to-warn">⚠️ Sessão expira em <span id="to-cnt">5</span> min — <button onclick="renewSession()" style="background:rgba(255,255,255,.25);border:none;color:#fff;padding:4px 10px;border-radius:20px;font-weight:700;cursor:pointer;font-family:var(--f)">Renovar</button></div>
+
+<div class="sb-ov" id="sb-ov" onclick="closeSB()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo">blim</div>
+    <div class="sb-sub">Painel Administrativo</div>
+    <div class="sb-admin"><span style="font-size:16px">🔐</span><span class="sb-admin-email" id="sb-email">—</span></div>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:10px"><div class="session-dot"></div><span style="font-size:11px;color:rgba(255,255,255,.4);font-weight:500">Sessão autenticada · <span id="sb-timer">30</span>min</span></div>
+  </div>
+  <div style="padding:8px 0;flex:1">
+    <div class="sb-sec">PRINCIPAL</div>
+    <div class="sb-item on" id="sbi-dashboard" onclick="showPanel('dashboard')"><span class="sb-ic">📊</span>Dashboard</div>
+    <div class="sb-item" id="sbi-live" onclick="showPanel('live')"><span class="sb-ic">🗺️</span>Ao vivo</div>
+    <div class="sb-sec">USUÁRIOS</div>
+    <div class="sb-item" id="sbi-providers" onclick="showPanel('providers')"><span class="sb-ic">🛠️</span>Prestadores</div>
+    <div class="sb-item" id="sbi-clients" onclick="showPanel('clients')"><span class="sb-ic">👥</span>Clientes</div>
+    <div class="sb-sec">PLATAFORMA</div>
+    <div class="sb-item" id="sbi-services" onclick="showPanel('services')"><span class="sb-ic">📋</span>Serviços</div>
+    <div class="sb-item" id="sbi-categories" onclick="showPanel('categories')"><span class="sb-ic">📂</span>Categorias</div>
+    <div class="sb-item" id="sbi-finances" onclick="showPanel('finances')"><span class="sb-ic">💰</span>Financeiro</div>
+    <div class="sb-sec">SISTEMA</div>
+    <div class="sb-item" id="sbi-settings" onclick="showPanel('settings')"><span class="sb-ic">⚙️</span>Configurações</div>
+    <div class="sb-item" id="sbi-terms" onclick="showPanel('terms')"><span class="sb-ic">📜</span>Termos</div>
+    <div class="sb-item" id="sbi-security" onclick="showPanel('security')"><span class="sb-ic">🔒</span>Segurança</div>
+  </div>
+  <div style="padding:12px 20px 24px;border-top:.5px solid rgba(255,255,255,.06)">
+    <div class="sb-item sb-logout" onclick="doLogout()" style="padding:10px 0;background:none"><span class="sb-ic">🚪</span>Sair com segurança</div>
+  </div>
+</div>
+
+<div class="scr on" id="s-admin">
+  <div class="tb"><button class="mb" onclick="openSB()">☰</button><div class="tt" id="panel-title">Dashboard</div><div style="display:flex;align-items:center;gap:4px"><div class="session-dot"></div></div></div>
+  <div class="session-bar"><div class="session-dot"></div><span id="sess-info">Sessão segura · expira em 30min</span></div>
+  <div class="sc" id="main-sc">
+    <!-- DASHBOARD -->
+    <div class="panel on" id="panel-dashboard">
+      <div class="sg">
+        <div class="sc2"><div class="sv" style="color:var(--pk)" id="ds-cli">—</div><div class="sk">Clientes</div><div class="st" style="color:var(--ok)">↑ +12 hoje</div></div>
+        <div class="sc2"><div class="sv" id="ds-prov">—</div><div class="sk">Prestadores</div><div class="st" style="color:var(--wa)">⏳ <span id="ds-pend">—</span> pendentes</div></div>
+        <div class="sc2"><div class="sv" style="color:var(--ok)" id="ds-online">—</div><div class="sk">Online agora</div><div class="st" style="color:var(--ok)">● Ao vivo</div></div>
+        <div class="sc2"><div class="sv" style="color:var(--pk)" id="ds-rev">R$—</div><div class="sk">Receita mês</div><div class="st" style="color:var(--ok)">↑ +8%</div></div>
+      </div>
+      <div class="lc"><div class="ch"><span>⏳ Aprovações pendentes</span><span class="bd bwn" id="pend-count">—</span></div><div id="pend-list"><div style="padding:20px;text-align:center;color:var(--g5);font-size:13px">Carregando...</div></div></div>
+      <div class="lc"><div class="ch"><span>🗺️ Serviços ao vivo</span><div class="session-dot"></div></div><div id="live-svcs"></div></div>
+      <div class="sb"></div>
+    </div>
+
+    <div class="panel" id="panel-live"><div id="map-live"></div><div style="padding:16px"><div style="font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px"><div class="session-dot"></div>Rastreamento em tempo real</div><div id="live-list"></div></div><div class="sb"></div></div>
+    
+    <!-- PRESTADORES (com visualização de documentos) -->
+    <div class="panel" id="panel-providers">
+      <div style="padding:12px 16px">
+        <input id="prov-q" oninput="filterProvs()" type="search" placeholder="🔍 Buscar prestador..." class="inp" style="border-radius:var(--rf);margin-bottom:10px">
+        <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px" id="prov-filters">
+          <button class="bd bpk" style="cursor:pointer;white-space:nowrap;padding:7px 14px;font-size:12px;border:none;font-family:var(--f)" onclick="setProvF('todos',this)">Todos</button>
+          <button class="bd bwn" style="cursor:pointer;white-space:nowrap;padding:7px 14px;font-size:12px;border:none;font-family:var(--f)" onclick="setProvF('pendente',this)">Pendentes</button>
+          <button class="bd bgk" style="cursor:pointer;white-space:nowrap;padding:7px 14px;font-size:12px;border:none;font-family:var(--f)" onclick="setProvF('ativo',this)">Ativos</button>
+          <button class="bd ber2" style="cursor:pointer;white-space:nowrap;padding:7px 14px;font-size:12px;border:none;font-family:var(--f)" onclick="setProvF('bloqueado',this)">Bloqueados</button>
+        </div>
+      </div>
+      <div class="lc" style="margin-top:0"><div id="provs-list"></div></div>
+      <div class="sb"></div>
+    </div>
+    
+    <div class="panel" id="panel-clients"><div style="padding:12px 16px"><input id="cli-q" oninput="filterClis()" type="search" placeholder="🔍 Buscar cliente..." class="inp" style="border-radius:var(--rf)"></div><div class="lc" style="margin-top:0"><div id="clis-list"></div></div><div class="sb"></div></div>
+    <div class="panel" id="panel-services"><div style="padding:12px 16px 0"><div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:10px"><span class="bd bgk" style="white-space:nowrap;padding:7px 14px;font-size:12px">Em andamento (3)</span><span class="bd bin" style="white-space:nowrap;padding:7px 14px;font-size:12px">A caminho (5)</span><span class="bd bgy" style="white-space:nowrap;padding:7px 14px;font-size:12px">Finalizados hoje (18)</span></div></div><div class="lc" style="margin-top:0"><div id="svcs-list"></div></div><div class="sb"></div></div>
+    <div class="panel" id="panel-categories"><div style="padding:12px 16px 0"><button class="btn bpk2 bsm" onclick="T('➕ Nova categoria')" style="margin-bottom:12px">+ Nova categoria</button></div><div class="lc" style="margin-top:0"><div id="cats-list"></div></div><div class="sb"></div></div>
+    <div class="panel" id="panel-finances"><div class="sg"><div class="sc2"><div class="sv">R$18k</div><div class="sk">Receita mês</div></div><div class="sc2"><div class="sv" style="color:var(--ok)">R$2.7k</div><div class="sk">Taxas (15%)</div></div><div class="sc2"><div class="sv">1.847</div><div class="sk">Transações</div></div><div class="sc2"><div class="sv" style="color:var(--pk)">R$9.8k</div><div class="sk">Ano</div></div></div><div style="padding:0 16px 12px"><button class="btn bgh bsm" onclick="T('📊 Relatório exportado!')">📥 Exportar CSV</button></div><div class="lc"><div class="ch">Últimas transações</div><div id="tx-list"></div></div><div class="sb"></div></div>
+    <div class="panel" id="panel-settings"><div class="lc" style="margin-top:12px"><div class="ch">🏢 Plataforma</div><div style="padding:8px 16px 16px"><div class="iw"><label>Nome da plataforma</label><input class="inp" type="text" value="BLIM"></div><div class="iw"><label>Slogan</label><input class="inp" type="text" value="Serviços sob medida para você"></div><div class="iw"><label>Taxa de intermediação (%)</label><input class="inp" type="number" value="15" min="0" max="50"></div><div class="iw"><label>E-mail de suporte</label><input class="inp" type="email" value="suporte@blim.com.br"></div><div class="iw"><label>WhatsApp de suporte</label><input class="inp" type="tel" value="(11) 4000-2546"></div></div></div><div class="lc"><div class="ch">🎨 Aparência</div><div style="display:flex;align-items:center;padding:14px 16px;gap:12px;border-bottom:.5px solid var(--g10)"><div style="width:36px;height:36px;border-radius:10px;background:var(--pks);display:flex;align-items:center;justify-content:center;font-size:17px">🌸</div><div style="flex:1;font-size:14px;font-weight:600">Cor principal</div><input type="color" value="#FF2D78" onchange="T('🎨 Cor atualizada!')" style="width:36px;height:36px;border:none;border-radius:50%;cursor:pointer;padding:2px;background:none"></div><div style="display:flex;align-items:center;padding:14px 16px;gap:12px"><div style="width:36px;height:36px;border-radius:10px;background:var(--pks);display:flex;align-items:center;justify-content:center;font-size:17px">🖼️</div><div style="flex:1;font-size:14px;font-weight:600">Logo da plataforma</div><button class="bd bpk" style="cursor:pointer;border:none;font-family:var(--f)" onclick="T('📷 Upload da logo')">Alterar</button></div></div><div class="lc"><div class="ch">🔧 Operação</div><div style="display:flex;align-items:center;padding:13px 16px;gap:12px;border-bottom:.5px solid var(--g10)"><div style="flex:1;font-size:14px;font-weight:600">📏 Raio máximo de busca</div><select class="inp" style="width:90px;padding:8px 10px;font-size:13px"><option>10 km</option><option selected>20 km</option><option>50 km</option></select></div><div style="display:flex;align-items:center;padding:13px 16px;gap:12px;border-bottom:.5px solid var(--g10)"><div style="flex:1;font-size:14px;font-weight:600">⏰ Tempo limite de resposta</div><select class="inp" style="width:90px;padding:8px 10px;font-size:13px"><option>20s</option><option selected>30s</option><option>60s</option></select></div><div style="display:flex;align-items:center;padding:13px 16px;gap:12px"><div style="flex:1;font-size:14px;font-weight:600">🔔 Notificações push</div><div class="tgl on" id="tgl-notif" onclick="this.classList.toggle('on');T(this.classList.contains('on')?'🔔 Push ativado':'🔕 Push desativado')"><div class="tgl-k"></div></div></div></div><div style="padding:0 16px 8px"><button class="btn bpk2" onclick="T('✅ Configurações salvas!')">Salvar alterações</button></div><div class="sb"></div></div>
+    <div class="panel" id="panel-terms"><div class="lc" style="margin-top:12px"><div class="ch">📜 Documentos legais</div><div style="padding:8px 16px 16px"><div class="iw"><label>Termos de Uso — Cliente</label><textarea class="inp">Bem-vinda à BLIM! Plataforma digital que conecta clientes a profissionais verificados...</textarea><button class="btn bgk2 bsm" onclick="T('✅ Salvo!')" style="margin-top:6px;width:auto">Salvar</button></div><div class="iw"><label>Termos do Prestador</label><textarea class="inp">Ao se cadastrar como prestadora na BLIM você concorda com: taxa de 15%...</textarea><button class="btn bgk2 bsm" onclick="T('✅ Salvo!')" style="margin-top:6px;width:auto">Salvar</button></div><div class="iw"><label>Política de Privacidade</label><textarea class="inp">Seus dados são protegidos conforme LGPD Lei nº 13.709/2018...</textarea><button class="btn bgk2 bsm" onclick="T('✅ Salvo!')" style="margin-top:6px;width:auto">Salvar</button></div></div></div><div class="sb"></div></div>
+    
+    <!-- SEGURANÇA (com backup e 2FA) -->
+    <div class="panel" id="panel-security">
+      <div class="lc" style="margin-top:12px">
+        <div class="ch">🔒 Segurança ativa</div>
+        <div style="padding:12px 16px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="background:#E8F8EF;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px"><span style="font-size:18px">✅</span><div><div style="font-size:13px;font-weight:700;color:var(--ok)">JWT + bcrypt ativo</div><div style="font-size:11px;color:var(--g5);margin-top:2px">Login seguro com token e senha criptografada</div></div></div>
+            <div style="background:#E8F8EF;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px"><span style="font-size:18px">✅</span><div><div style="font-size:13px;font-weight:700;color:var(--ok)">Sessão com timeout de 30min</div><div style="font-size:11px;color:var(--g5);margin-top:2px">Logout automático por inatividade</div></div></div>
+            <div style="background:#E8F8EF;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px"><span style="font-size:18px">✅</span><div><div style="font-size:13px;font-weight:700;color:var(--ok)">Sessão única por dispositivo</div><div style="font-size:11px;color:var(--g5);margin-top:2px">Login em outro dispositivo derruba este</div></div></div>
+            <div style="background:#E8F8EF;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px"><span style="font-size:18px">✅</span><div><div style="font-size:13px;font-weight:700;color:var(--ok)">Autenticação de dois fatores (2FA)</div><div style="font-size:11px;color:var(--g5);margin-top:2px">Proteção adicional com Google Authenticator</div></div></div>
+            <div style="background:#E8F8EF;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px"><span style="font-size:18px">✅</span><div><div style="font-size:13px;font-weight:700;color:var(--ok)">Backup automático do banco</div><div style="font-size:11px;color:var(--g5);margin-top:2px">Backup diário às 2h da manhã</div></div></div>
+            <div style="background:#E8F8EF;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px"><span style="font-size:18px">✅</span><div><div style="font-size:13px;font-weight:700;color:var(--ok)">Upload de documentos</div><div style="font-size:11px;color:var(--g5);margin-top:2px">RG/CNH + selfie para verificação de prestadores</div></div></div>
+          </div>
+          <div style="margin-top:16px;padding:14px;background:var(--g10);border-radius:12px">
+            <div style="font-size:12px;font-weight:700;color:var(--g4);margin-bottom:8px">AÇÕES DO SISTEMA</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <button class="btn bpk2 bsm" onclick="createManualBackup()" style="width:auto">📦 Criar backup manual</button>
+              <button class="btn bgh bsm" onclick="viewBackups()" style="width:auto">📋 Ver backups disponíveis</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lc">
+        <div class="ch">🔑 Alterar senha do admin</div>
+        <div style="padding:8px 16px 16px">
+          <div class="iw"><label>Senha atual</label><input class="inp" type="password" id="admin-current-password" placeholder="••••••••"></div>
+          <div class="iw"><label>Nova senha</label><input class="inp" type="password" id="admin-new-password" placeholder="Mínimo 12 caracteres"></div>
+          <div class="iw"><label>Confirmar nova senha</label><input class="inp" type="password" id="admin-confirm-password" placeholder="Repita a nova senha"></div>
+          <button class="btn bpk2" onclick="changeAdminPassword()">Atualizar senha</button>
+        </div>
+      </div>
+      <!-- Seção 2FA do Admin -->
+      <div class="lc">
+        <div class="ch">🔐 Autenticação de dois fatores (2FA)</div>
+        <div style="padding:16px" id="admin-2fa-section">
+          <button class="btn bpk2 bsm" onclick="setupAdmin2FA()">Configurar 2FA para sua conta</button>
+        </div>
+      </div>
+      <div style="padding:0 16px 8px">
+        <button class="btn ber3" onclick="doLogout()">🚪 Encerrar sessão agora</button>
+      </div>
+      <div class="sb"></div>
+    </div>
+
+  </div>
+</div>
+<div class="modal-bg" id="modal-bg"><div class="modal-sheet"><div style="width:40px;height:4px;background:var(--g8);border-radius:2px;margin:0 auto 20px"></div><div id="modal-content"></div><button class="btn bgh" style="margin-top:16px" onclick="closeModal()">Fechar</button></div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// 🔴 LOCAL 2 - COLE SUA URL DO BACKEND AQUI 🔴
+// ════════════════════════════════════════════════════════════
+const API_URL = 'https://🔴COLE_AQUI_A_URL_DO_BACKEND🔴';
+
+// =============================================
+// SEGURANÇA JWT + SESSÃO ÚNICA
+// =============================================
+let accessToken = localStorage.getItem('accessToken');
+let refreshToken = localStorage.getItem('refreshToken');
+let currentUser = null;
+let _sessTimer = null, _warnTimer = null;
+let pending2FA = { required: false, userId: null };
+let allProviders = [];
+let allClients = [];
+let provFilter = 'todos';
+
+function getDeviceId() {
+  let id = localStorage.getItem('deviceId');
+  if (!id) { id = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 10); localStorage.setItem('deviceId', id); }
+  return id;
+}
+
+async function apiFetch(url, options = {}) {
+  const headers = { 'Content-Type': 'application/json', 'X-Device-ID': getDeviceId() };
+  if (accessToken) headers['Authorization'] = 'Bearer ' + accessToken;
+  let res = await fetch(API_URL + url, { ...options, headers });
+  if (res.status === 401 && refreshToken) {
+    const refreshRes = await fetch(API_URL + '/api/auth/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refreshToken }) });
+    if (refreshRes.ok) { const data = await refreshRes.json(); accessToken = data.accessToken; refreshToken = data.refreshToken; localStorage.setItem('accessToken', accessToken); localStorage.setItem('refreshToken', refreshToken); headers['Authorization'] = 'Bearer ' + accessToken; res = await fetch(API_URL + url, { ...options, headers }); }
+    else { localStorage.removeItem('accessToken'); localStorage.removeItem('refreshToken'); accessToken = null; refreshToken = null; lockScreen(); throw new Error('Sessão expirada'); }
+  }
+  if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || 'Erro na requisição'); }
+  return res.json();
+}
+
+function T(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2800); }
+
+// =============================================
+// LOGIN / LOGOUT (REAL COM 2FA)
+// =============================================
+async function doAdminLogin() {
+  const email = document.getElementById('adm-email')?.value || '';
+  const password = document.getElementById('adm-pass')?.value || '';
+  const code2fa = document.getElementById('code2fa')?.value || '';
+  
+  if (!email.trim() || !password) { showLockErr('Preencha e-mail e senha'); return; }
+  
+  if (pending2FA.required && !code2fa) {
+    showLockErr('Digite o código de autenticação de dois fatores');
+    return;
+  }
+  
+  showLockLoading(true);
+  try {
+    const res = await apiFetch('/api/auth/login', { 
+      method: 'POST', 
+      body: JSON.stringify({ email, password, deviceId: getDeviceId(), code: code2fa }) 
+    });
+    
+    if (res.requires2FA) {
+      pending2FA = { required: true, userId: res.userId };
+      document.getElementById('div-2fa').style.display = 'block';
+      showLockErr('Código 2FA necessário. Verifique seu aplicativo autenticador.');
+      showLockLoading(false);
+      return;
+    }
+    
+    if (res.user?.role !== 'admin') { await apiFetch('/api/auth/logout', { method: 'POST' }); throw new Error('Acesso permitido apenas para administradores'); }
+    accessToken = res.accessToken; refreshToken = res.refreshToken;
+    localStorage.setItem('accessToken', accessToken); localStorage.setItem('refreshToken', refreshToken);
+    currentUser = res.user;
+    pending2FA = { required: false, userId: null };
+    document.getElementById('div-2fa').style.display = 'none';
+    document.getElementById('code2fa').value = '';
+    unlockAdmin(res.user.email);
+  } catch(e) { showLockLoading(false); showLockErr(e.message); document.getElementById('adm-pass').value = ''; }
+}
+
+function unlockAdmin(email) {
+  showLockLoading(false);
+  document.getElementById('lockscreen').classList.add('hidden');
+  document.getElementById('app').classList.add('unlocked');
+  document.getElementById('sb-email').textContent = email;
+  document.getElementById('sess-info').textContent = 'Sessão segura · ' + email + ' · JWT ativo';
+  startSessionTimer();
+  loadDashboard();
+  T('✅ Acesso autorizado');
+}
+
+function lockScreen() {
+  document.getElementById('app').classList.remove('unlocked');
+  document.getElementById('lockscreen').classList.remove('hidden');
+  location.reload();
+}
+
+async function doLogout() {
+  try { await apiFetch('/api/auth/logout', { method: 'POST' }); } catch(e) {}
+  accessToken = null; refreshToken = null; localStorage.removeItem('accessToken'); localStorage.removeItem('refreshToken');
+  clearTimeout(_sessTimer); clearTimeout(_warnTimer);
+  lockScreen();
+}
+
+async function changeAdminPassword() {
+  const currentPassword = document.getElementById('admin-current-password')?.value || '';
+  const newPassword = document.getElementById('admin-new-password')?.value || '';
+  const confirmPassword = document.getElementById('admin-confirm-password')?.value || '';
+  
+  if (!currentPassword) { T('Digite sua senha atual'); return; }
+  if (!newPassword || newPassword.length < 8) { T('Nova senha deve ter pelo menos 8 caracteres'); return; }
+  if (newPassword !== confirmPassword) { T('As senhas não coincidem'); return; }
+  
+  try {
+    await apiFetch('/api/password/change', { method: 'POST', body: JSON.stringify({ currentPassword, newPassword }) });
+    T('Senha alterada com sucesso! Faça login novamente.');
+    setTimeout(() => doLogout(), 2000);
+  } catch(e) { T(e.message); }
+}
+
+function showLockErr(msg) { const el = document.getElementById('lf-err'); if (el) { el.textContent = msg; el.classList.add('on'); setTimeout(() => el.classList.remove('on'), 3000); } }
+function showLockLoading(on) { const form = document.getElementById('lf-form'); const load = document.getElementById('lf-load'); const err = document.getElementById('lf-err'); if (form) form.style.display = on ? 'none' : 'block'; if (load) load.classList.toggle('on', on); if (err && on) err.classList.remove('on'); }
+
+// =============================================
+// 2FA PARA ADMIN
+// =============================================
+async function setupAdmin2FA() {
+  try {
+    const res = await apiFetch('/api/2fa/setup');
+    document.getElementById('admin-2fa-section').innerHTML = `
+      <div style="text-align:center">
+        <p>Escaneie o QR Code com Google Authenticator</p>
+        <img src="${res.qrCode}" style="width:200px;height:200px;margin:20px auto;display:block">
+        <p style="font-size:12px;color:var(--g5)">Ou digite manualmente: <strong>${res.secret}</strong></p>
+        <div class="iw"><label>Código de verificação</label><input class="inp" id="admin-2fa-code" placeholder="000000"></div>
+        <button class="btn bpk2 bsm" onclick="verifyAdmin2FA()">Verificar e ativar</button>
+        <button class="btn bgh bsm" onclick="cancelAdmin2FA()">Cancelar</button>
+      </div>
+    `;
+  } catch(e) { T(e.message); }
+}
+
+async function verifyAdmin2FA() {
+  const code = document.getElementById('admin-2fa-code')?.value || '';
+  if (!code) { T('Digite o código de verificação'); return; }
+  try {
+    await apiFetch('/api/2fa/enable', { method: 'POST', body: JSON.stringify({ code }) });
+    T('2FA ativado com sucesso para sua conta!');
+    document.getElementById('admin-2fa-section').innerHTML = `<button class="btn bpk2 bsm" onclick="disableAdmin2FA()">Desativar 2FA</button>`;
+  } catch(e) { T(e.message); }
+}
+
+async function disableAdmin2FA() {
+  const code = prompt('Digite o código do Google Authenticator para desativar o 2FA:');
+  if (!code) return;
+  try {
+    await apiFetch('/api/2fa/disable', { method: 'POST', body: JSON.stringify({ code }) });
+    T('2FA desativado!');
+    document.getElementById('admin-2fa-section').innerHTML = `<button class="btn bpk2 bsm" onclick="setupAdmin2FA()">Configurar 2FA para sua conta</button>`;
+  } catch(e) { T(e.message); }
+}
+
+function cancelAdmin2FA() {
+  document.getElementById('admin-2fa-section').innerHTML = `<button class="btn bpk2 bsm" onclick="setupAdmin2FA()">Configurar 2FA para sua conta</button>`;
+}
+
+// =============================================
+// BACKUP
+// =============================================
+async function createManualBackup() {
+  try {
+    T('Criando backup...');
+    const res = await apiFetch('/api/backup/create', { method: 'POST' });
+    if (res.success) {
+      T(`✅ Backup criado: ${res.fileName} (${res.size?.toFixed(2)} MB)`);
+    } else {
+      T('❌ Erro ao criar backup');
+    }
+  } catch(e) { T(e.message); }
+}
+
+async function viewBackups() {
+  try {
+    const backups = await apiFetch('/api/backup');
+    if (backups.length === 0) {
+      document.getElementById('modal-content').innerHTML = '<p>Nenhum backup disponível</p>';
+    } else {
+      document.getElementById('modal-content').innerHTML = `
+        <div style="font-weight:800;margin-bottom:16px">📦 Backups disponíveis</div>
+        ${backups.map(b => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--g9)">
+            <div><div style="font-size:13px;font-weight:600">${b.name}</div><div style="font-size:11px;color:var(--g5)">${new Date(b.modified).toLocaleString('pt-BR')} · ${(b.size / 1024 / 1024).toFixed(2)} MB</div></div>
+            <div style="display:flex;gap:6px">
+              <button class="ab ain" onclick="downloadBackup('${b.name}')">⬇️</button>
+              <button class="ab aer" onclick="deleteBackup('${b.name}')">🗑️</button>
+            </div>
+          </div>
+        `).join('')}
+        <div style="margin-top:16px"><button class="btn ber3 bsm" onclick="restoreBackupPrompt()">⚠️ Restaurar backup (cuidado!)</button></div>
+      `;
+    }
+    openModal();
+  } catch(e) { T(e.message); }
+}
+
+async function downloadBackup(filename) {
+  window.open(API_URL + '/api/backup/download/' + filename, '_blank');
+}
+
+async function deleteBackup(filename) {
+  if (!confirm(`Tem certeza que deseja excluir o backup ${filename}?`)) return;
+  try {
+    await apiFetch('/api/backup/' + filename, { method: 'DELETE' });
+    T('Backup excluído');
+    viewBackups();
+  } catch(e) { T(e.message); }
+}
+
+async function restoreBackupPrompt() {
+  const filename = prompt('Digite o nome exato do backup para restaurar (cuidado! isso vai sobrescrever o banco atual):');
+  if (!filename) return;
+  if (!confirm(`⚠️ ATENÇÃO! Restaurar ${filename} vai sobrescrever TODO o banco de dados atual. Tem certeza?`)) return;
+  try {
+    T('Restaurando backup...');
+    await apiFetch('/api/backup/restore/' + filename, { method: 'POST' });
+    T('✅ Backup restaurado! O sistema será reiniciado.');
+    setTimeout(() => location.reload(), 3000);
+  } catch(e) { T(e.message); }
+}
+
+// =============================================
+// TIMEOUT DE SESSÃO
+// =============================================
+function startSessionTimer() {
+  clearTimeout(_sessTimer); clearTimeout(_warnTimer);
+  document.getElementById('to-warn').classList.remove('on');
+  _warnTimer = setTimeout(function() {
+    let cnt = 5;
+    document.getElementById('to-cnt').textContent = cnt;
+    document.getElementById('to-warn').classList.add('on');
+    const iv = setInterval(function() { cnt--; document.getElementById('to-cnt').textContent = cnt; if (cnt <= 0) { clearInterval(iv); doLogout(); } }, 60000);
+  }, 25 * 60000);
+  _sessTimer = setTimeout(function() { doLogout(); }, 30 * 60000);
+  updateTimerDisplay(30);
+}
+function updateTimerDisplay(mins) { const el = document.getElementById('sb-timer'); if (el) el.textContent = mins; }
+function renewSession() { startSessionTimer(); document.getElementById('to-warn').classList.remove('on'); T('✅ Sessão renovada por mais 30 minutos'); }
+['click', 'touchstart', 'keydown'].forEach(function(ev) { document.addEventListener(ev, function() { if (accessToken) startSessionTimer(); }, { passive: true }); });
+
+// =============================================
+// SIDEBAR
+// =============================================
+function openSB() { document.getElementById('sidebar').classList.add('on'); document.getElementById('sb-ov').classList.add('on'); }
+function closeSB() { document.getElementById('sidebar').classList.remove('on'); document.getElementById('sb-ov').classList.remove('on'); }
+
+// =============================================
+// PANELS
+// =============================================
+let curPanel = 'dashboard';
+function showPanel(id) {
+  closeSB();
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('on'));
+  const p = document.getElementById('panel-' + id);
+  const s = document.getElementById('sbi-' + id);
+  if (p) p.classList.add('on');
+  if (s) s.classList.add('on');
+  const titles = { dashboard: 'Dashboard', live: 'Ao vivo', providers: 'Prestadores', clients: 'Clientes', services: 'Serviços', categories: 'Categorias', finances: 'Financeiro', settings: 'Configurações', terms: 'Termos', security: 'Segurança' };
+  document.getElementById('panel-title').textContent = titles[id] || id;
+  document.getElementById('main-sc').scrollTop = 0;
+  curPanel = id;
+  if (id === 'live') initLiveMap();
+  if (id === 'providers') renderProviders();
+  if (id === 'clients') renderClients();
+  if (id === 'services') renderServices();
+  if (id === 'categories') renderCategories();
+  if (id === 'finances') renderFinances();
+  if (id === 'security') {
+    // Carregar status 2FA do admin
+    apiFetch('/api/2fa/status').then(res => {
+      if (res.enabled) {
+        document.getElementById('admin-2fa-section').innerHTML = `<button class="btn ber3 bsm" onclick="disableAdmin2FA()">Desativar 2FA da sua conta</button>`;
+      } else {
+        document.getElementById('admin-2fa-section').innerHTML = `<button class="btn bpk2 bsm" onclick="setupAdmin2FA()">Configurar 2FA para sua conta</button>`;
+      }
+    }).catch(() => {});
+  }
+}
+
+// =============================================
+// DASHBOARD (REAL)
+// =============================================
+async function loadDashboard() {
+  if (!accessToken) return;
+  try {
+    const stats = await apiFetch('/api/admin/dashboard');
+    document.getElementById('ds-cli').textContent = stats.clientes || '—';
+    document.getElementById('ds-prov').textContent = stats.prestadores || '—';
+    document.getElementById('ds-pend').textContent = stats.pendentes || '—';
+    document.getElementById('ds-online').textContent = stats.ativos || '—';
+    document.getElementById('pend-count').textContent = stats.pendentes || '—';
+    await loadPendingProviders();
+    await loadRecentServices();
+  } catch(e) { T(e.message); }
+}
+
+async function loadPendingProviders() {
+  try {
+    const provs = await apiFetch('/api/admin/providers?status=pendente');
+    document.getElementById('pend-list').innerHTML = provs.length === 0 ? '<div style="padding:20px;text-align:center;color:var(--g5);font-size:13px">Nenhuma aprovação pendente ✅</div>' : provs.map(p => '<div class="ur"><div class="uav" style="background:var(--wa)">' + (p.name[0] || '?') + '</div><div style="flex:1;min-width:0"><div class="un">' + escHtml(p.name) + '</div><div class="us">' + escHtml(p.category || '—') + ' · Aguardando análise</div></div><div class="uacts"><button class="ab ain" onclick="viewDocuments(\'' + p.id + '\')">📄 Docs</button><button class="ab aok" onclick="aprovarPrestador(\'' + p.id + '\')">✓ Apr.</button><button class="ab aer" onclick="reprovarPrestador(\'' + p.id + '\')">✕</button></div></div>').join('');
+  } catch(e) { document.getElementById('pend-list').innerHTML = '<div style="padding:20px;text-align:center;color:var(--g5);font-size:13px">Erro ao carregar</div>'; }
+}
+
+async function loadRecentServices() {
+  try {
+    const services = await apiFetch('/api/admin/services');
+    document.getElementById('live-svcs').innerHTML = services.slice(0, 10).map(s => '<div style="padding:12px 16px;border-bottom:.5px solid var(--g10)"><div style="display:flex;justify-content:space-between;align-items:start"><div><div style="font-size:14px;font-weight:700">' + escHtml(s.category) + '</div><div style="font-size:12px;color:var(--g5);margin-top:2px">' + (s.client_name || '—') + ' → ' + (s.provider_name || 'Aguardando') + '</div></div><span class="bd ' + (s.status === 'em_andamento' ? 'bgk' : s.status === 'a_caminho' ? 'bin' : 'bgy') + '">' + escHtml(s.status) + '</span></div></div>').join('') || '<div style="padding:16px;text-align:center;color:var(--g5);font-size:13px">Nenhum serviço ativo</div>';
+  } catch(e) { document.getElementById('live-svcs').innerHTML = '<div style="padding:16px;text-align:center;color:var(--g5);font-size:13px">Erro ao carregar serviços</div>'; }
+}
+
+// =============================================
+// VISUALIZAÇÃO DE DOCUMENTOS (NOVO)
+// =============================================
+async function viewDocuments(userId) {
+  try {
+    const docs = await apiFetch('/api/upload/' + userId);
+    document.getElementById('modal-content').innerHTML = `
+      <div style="font-weight:800;margin-bottom:16px">📄 Documentos de ${escHtml(docs.name)}</div>
+      <div style="background:var(--g10);border-radius:var(--r);padding:12px;margin-bottom:12px">
+        <div style="font-weight:700;margin-bottom:8px">RG/CNH:</div>
+        ${docs.document_url ? `<a href="${docs.document_url}" target="_blank" style="color:var(--pk)">Visualizar documento</a>` : '<span style="color:var(--g5)">Não enviado</span>'}
+      </div>
+      <div style="background:var(--g10);border-radius:var(--r);padding:12px;margin-bottom:16px">
+        <div style="font-weight:700;margin-bottom:8px">Selfie:</div>
+        ${docs.selfie_url ? `<a href="${docs.selfie_url}" target="_blank" style="color:var(--pk)">Visualizar selfie</a>` : '<span style="color:var(--g5)">Não enviada</span>'}
+      </div>
+      ${docs.status === 'pendente' ? `
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button class="btn bgk2 bsm" style="flex:1" onclick="aprovarDocumentos('${userId}')">✓ Aprovar documentos</button>
+          <button class="btn ber3 bsm" style="flex:1" onclick="reprovarDocumentos('${userId}')">✕ Rejeitar</button>
+        </div>
+      ` : `<div class="bd bgk" style="display:inline-block">Status: ${docs.status}</div>`}
+    `;
+    openModal();
+  } catch(e) { T(e.message); }
+}
+
+async function aprovarDocumentos(userId) {
+  try {
+    await apiFetch('/api/upload/' + userId + '/approve', { method: 'POST' });
+    T('✅ Documentos aprovados! Prestador ativado.');
+    closeModal();
+    loadDashboard();
+    renderProviders();
+  } catch(e) { T(e.message); }
+}
+
+async function reprovarDocumentos(userId) {
+  const reason = prompt('Motivo da rejeição (opcional):');
+  try {
+    await apiFetch('/api/upload/' + userId + '/reject', { method: 'POST', body: JSON.stringify({ reason }) });
+    T('❌ Documentos rejeitados');
+    closeModal();
+    loadDashboard();
+    renderProviders();
+  } catch(e) { T(e.message); }
+}
+
+// =============================================
+// PRESTADORES (REAL)
+// =============================================
+async function loadAllProviders() {
+  if (!accessToken) return [];
+  try {
+    const provs = await apiFetch('/api/admin/providers');
+    allProviders = provs;
+    return provs;
+  } catch(e) { return []; }
+}
+
+async function renderProviders() {
+  await loadAllProviders();
+  filterProvs();
+}
+
+function filterProvs() {
+  const q = document.getElementById('prov-q')?.value || '';
+  let list = allProviders.filter(p => {
+    if (provFilter !== 'todos' && p.status !== provFilter) return false;
+    if (q && !(p.name || '').toLowerCase().includes(q.toLowerCase()) && !(p.category || '').toLowerCase().includes(q.toLowerCase())) return false;
+    return true;
+  });
+  document.getElementById('provs-list').innerHTML = list.length === 0 ? '<div style="padding:24px;text-align:center;color:var(--g5);font-size:14px">Nenhum resultado</div>' : list.map(p => {
+    const statusClass = p.status === 'ativo' ? 'bgk' : p.status === 'pendente' ? 'bwn' : 'ber2';
+    const statusText = p.status === 'ativo' ? 'Ativo' : p.status === 'pendente' ? 'Pendente' : 'Bloqueado';
+    return '<div class="ur"><div class="uav" style="background:' + (p.status === 'ativo' ? '#34C759' : p.status === 'pendente' ? '#FF9500' : '#FF3B30') + '">' + (p.name ? p.name[0].toUpperCase() : '?') + '</div><div style="flex:1;min-width:0"><div class="un">' + escHtml(p.name) + '</div><div class="us">' + escHtml(p.category || '—') + ' · ' + statusText + '</div></div><div class="uacts">' + (p.status === 'pendente' ? '<button class="ab ain" onclick="viewDocuments(\'' + p.id + '\')">📄 Docs</button><button class="ab aok" onclick="aprovarPrestador(\'' + p.id + '\')">✓</button><button class="ab aer" onclick="reprovarPrestador(\'' + p.id + '\')">✕</button>' : '') + (p.status === 'ativo' ? '<button class="ab aer" onclick="bloquearPrestador(\'' + p.id + '\')">🔒</button>' : '') + (p.status === 'bloqueado' ? '<button class="ab aok" onclick="desbloquearPrestador(\'' + p.id + '\')">🔓</button>' : '') + '<button class="ab ain" onclick="viewPrestador(\'' + p.id + '\')">👁</button></div></div>';
+  }).join('');
+}
+
+function setProvF(f, el) { provFilter = f; document.querySelectorAll('#prov-filters button').forEach(b => b.style.opacity = '.5'); el.style.opacity = '1'; filterProvs(); }
+
+async function aprovarPrestador(id) { try { await apiFetch('/api/admin/providers/' + id + '/status', { method: 'PUT', body: JSON.stringify({ status: 'ativo' }) }); T('✅ Prestador aprovado!'); renderProviders(); loadDashboard(); } catch(e) { T(e.message); } }
+async function reprovarPrestador(id) { try { await apiFetch('/api/admin/providers/' + id + '/status', { method: 'PUT', body: JSON.stringify({ status: 'bloqueado' }) }); T('❌ Prestador reprovado'); renderProviders(); loadDashboard(); } catch(e) { T(e.message); } }
+async function bloquearPrestador(id) { try { await apiFetch('/api/admin/providers/' + id + '/status', { method: 'PUT', body: JSON.stringify({ status: 'bloqueado' }) }); T('🔒 Prestador bloqueado'); renderProviders(); } catch(e) { T(e.message); } }
+async function desbloquearPrestador(id) { try { await apiFetch('/api/admin/providers/' + id + '/status', { method: 'PUT', body: JSON.stringify({ status: 'ativo' }) }); T('🔓 Prestador desbloqueado'); renderProviders(); } catch(e) { T(e.message); } }
+
+async function viewPrestador(id) {
+  const p = allProviders.find(x => x.id === id);
+  if (!p) return;
+  const statusClass = p.status === 'ativo' ? 'bgk' : p.status === 'pendente' ? 'bwn' : 'ber2';
+  document.getElementById('modal-content').innerHTML = '<div style="text-align:center;margin-bottom:20px"><div style="width:64px;height:64px;border-radius:50%;background:' + (p.status === 'ativo' ? '#34C759' : p.status === 'pendente' ? '#FF9500' : '#FF3B30') + ';display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;margin:0 auto 12px">' + (p.name ? p.name[0].toUpperCase() : '?') + '</div><div style="font-size:18px;font-weight:800">' + escHtml(p.name) + '</div><div style="font-size:14px;color:var(--g5);margin-top:4px">' + escHtml(p.email) + '</div><span class="bd ' + statusClass + '" style="margin-top:8px">' + p.status + '</span></div><div style="background:var(--g10);border-radius:var(--r);padding:14px;margin-bottom:16px"><div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--g9)"><span style="font-size:13px;color:var(--g5)">Categoria</span><span style="font-size:13px;font-weight:600">' + escHtml(p.category || '—') + '</span></div><div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--g9)"><span style="font-size:13px;color:var(--g5)">Avaliação</span><span style="font-size:13px;font-weight:600">' + (p.rating || '—') + ' ⭐</span></div><div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:13px;color:var(--g5)">Serviços</span><span style="font-size:13px;font-weight:600">' + (p.total_services || 0) + '</span></div></div>' + (p.status === 'pendente' ? '<div style="display:flex;gap:10px"><button class="btn ber3 bsm" style="flex:1" onclick="reprovarPrestador(\'' + id + '\');closeModal()">✕ Reprovar</button><button class="btn bgk2 bsm" style="flex:1" onclick="aprovarPrestador(\'' + id + '\');closeModal()">✓ Aprovar</button></div>' : '') + (p.status === 'ativo' ? '<button class="btn ber3 bsm" onclick="bloquearPrestador(\'' + id + '\');closeModal()">🔒 Bloquear</button>' : '') + (p.status === 'bloqueado' ? '<button class="btn bgk2 bsm" onclick="desbloquearPrestador(\'' + id + '\');closeModal()">🔓 Desbloquear</button>' : '');
+  openModal();
+}
+
+// =============================================
+// CLIENTES (REAL)
+// =============================================
+async function loadAllClients() {
+  if (!accessToken) return [];
+  try {
+    const clients = await apiFetch('/api/admin/clients');
+    allClients = clients;
+    return clients;
+  } catch(e) { return []; }
+}
+
+async function renderClients() {
+  await loadAllClients();
+  filterClis();
+}
+
+function filterClis() {
+  const q = document.getElementById('cli-q')?.value || '';
+  const list = allClients.filter(c => !q || (c.name || '').toLowerCase().includes(q.toLowerCase()) || (c.email || '').toLowerCase().includes(q.toLowerCase()));
+  document.getElementById('clis-list').innerHTML = list.length === 0 ? '<div style="padding:24px;text-align:center;color:var(--g5);font-size:14px">Nenhum cliente encontrado</div>' : list.map(c => '<div class="ur"><div class="uav" style="background:linear-gradient(135deg,var(--pk),var(--pk2))">' + (c.name ? c.name[0].toUpperCase() : '?') + '</div><div style="flex:1;min-width:0"><div class="un">' + escHtml(c.name) + '</div><div class="us">' + escHtml(c.email) + ' · ' + (c.total_services || 0) + ' serv.</div></div><div class="uacts"><button class="ab ain" onclick="viewCliente(\'' + c.id + '\')">👁</button>' + (c.status === 'ativo' ? '<button class="ab aer" onclick="bloquearCliente(\'' + c.id + '\')">🔒</button>' : '<button class="ab aok" onclick="desbloquearCliente(\'' + c.id + '\')">🔓</button>') + '</div></div>').join('');
+}
+
+async function viewCliente(id) {
+  const c = allClients.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('modal-content').innerHTML = '<div style="text-align:center;margin-bottom:16px"><div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk2));display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;margin:0 auto 12px">' + (c.name ? c.name[0].toUpperCase() : '?') + '</div><div style="font-size:18px;font-weight:800">' + escHtml(c.name) + '</div><div style="font-size:14px;color:var(--g5);margin-top:4px">' + escHtml(c.email) + '</div><span class="bd ' + (c.status === 'ativo' ? 'bgk' : 'ber2') + '" style="margin-top:8px">' + (c.status || 'ativo') + '</span></div><div style="background:var(--g10);border-radius:var(--r);padding:14px"><div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--g9)"><span style="font-size:13px;color:var(--g5)">Serviços</span><span style="font-size:13px;font-weight:600">' + (c.total_services || 0) + '</span></div><div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:13px;color:var(--g5)">Avaliação</span><span style="font-size:13px;font-weight:600">' + (c.rating || '—') + ' ⭐</span></div></div>';
+  openModal();
+}
+
+async function bloquearCliente(id) { try { await apiFetch('/api/admin/providers/' + id + '/status', { method: 'PUT', body: JSON.stringify({ status: 'bloqueado' }) }); T('🔒 Cliente bloqueado'); renderClients(); } catch(e) { T(e.message); } }
+async function desbloquearCliente(id) { try { await apiFetch('/api/admin/providers/' + id + '/status', { method: 'PUT', body: JSON.stringify({ status: 'ativo' }) }); T('🔓 Cliente desbloqueado'); renderClients(); } catch(e) { T(e.message); } }
+
+// =============================================
+// SERVIÇOS (REAL)
+// =============================================
+async function renderServices() {
+  try {
+    const services = await apiFetch('/api/admin/services');
+    document.getElementById('svcs-list').innerHTML = services.slice(0, 20).map(s => '<div style="padding:14px 16px;border-bottom:.5px solid var(--g10)"><div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px"><div style="font-size:14px;font-weight:700">' + escHtml(s.category) + '</div><span class="bd ' + (s.status === 'em_andamento' ? 'bgk' : s.status === 'a_caminho' ? 'bin' : 'bgy') + '">' + escHtml(s.status) + '</span></div><div style="font-size:12px;color:var(--g5)">' + (s.client_name || '—') + ' → ' + (s.provider_name || 'Aguardando') + '</div><div style="font-size:12px;color:var(--g5);margin-top:4px">' + (s.value || '—') + '</div></div>').join('') || '<div style="padding:24px;text-align:center;color:var(--g5);font-size:14px">Nenhum serviço encontrado</div>';
+  } catch(e) { document.getElementById('svcs-list').innerHTML = '<div style="padding:24px;text-align:center;color:var(--g5);font-size:14px">Erro ao carregar serviços</div>'; }
+}
+
+// =============================================
+// CATEGORIAS (estática - mantida igual)
+// =============================================
+const CATS33 = ['🔧 Encanamento', '⚡ Elétrica', '🏠 Reforma', '🧹 Limpeza', '❄️ Ar-condicionado', '🌿 Jardinagem', '🐾 Pet', '💻 TI', '🎨 Design', '📦 Mudança', '🔑 Chaveiro', '🍽️ Gastronomia', '💆 Bem-estar', '🏗️ Construção', '📸 Fotografia', '🎓 Aulas', '🔩 Serralheria', '🧰 Marcenaria', '🚿 Hidráulica', '🎪 Eventos', '🔥 Gás', '🏊 Piscinas', '🔐 Segurança', '🚜 Terraplanagem', '👗 Costura', '🖥️ Tecnologia', '🏥 Saúde Casa', '📺 Antenas/TV', '💪 Personal', '🚗 Despachante', '⚖️ Jurídico', '📊 Contabilidade', '🔧 Mecânica'];
+
+function renderCategories() {
+  document.getElementById('cats-list').innerHTML = CATS33.map(c => { const parts = c.split(' '); const em = parts[0]; const nm = parts.slice(1).join(' '); return '<div style="display:flex;align-items:center;padding:12px 16px;border-bottom:.5px solid var(--g10)"><div style="font-size:22px;width:36px;flex-shrink:0">' + em + '</div><div style="flex:1;font-size:14px;font-weight:600">' + nm + '</div><div style="display:flex;gap:6px"><button class="ab awa" onclick="T(\'✏️ Editando ' + nm + '\')">✏️</button><button class="ab aer" onclick="T(\'🗑️ Removida\')">✕</button></div></div>'; }).join('');
+}
+
+// =============================================
+// FINANCEIRO (estático por enquanto)
+// =============================================
+const DEMO_TXS = [{ dt: 'Hoje 14h', s: 'Limpeza', v: 'R$180', tx: 'R$27', m: 'PIX' }, { dt: 'Hoje 13h', s: 'Elétrica', v: 'R$120', tx: 'R$18', m: 'Crédito' }, { dt: 'Hoje 12h', s: 'Encanamento', v: 'R$250', tx: 'R$37,50', m: 'PIX' }, { dt: 'Ontem', s: 'Jardinagem', v: 'R$150', tx: 'R$22,50', m: 'Dinheiro' }];
+
+function renderFinances() {
+  document.getElementById('tx-list').innerHTML = DEMO_TXS.map(t => '<div style="display:flex;align-items:center;padding:12px 16px;border-bottom:.5px solid var(--g10)"><div style="width:36px;height:36px;border-radius:50%;background:var(--pks);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-right:10px">💰</div><div style="flex:1"><div style="font-size:13px;font-weight:700">' + t.s + '</div><div style="font-size:11px;color:var(--g5);margin-top:1px">' + t.dt + ' · Total: ' + t.v + ' · ' + t.m + '</div></div><div style="font-size:14px;font-weight:700;color:var(--ok)">+' + t.tx + '</div></div>').join('');
+}
+
+// =============================================
+// MAPA AO VIVO
+// =============================================
+let _liveMap = null;
+function initLiveMap() {
+  if (_liveMap) { _liveMap.invalidateSize(); return; }
+  if (typeof L === 'undefined') { setTimeout(initLiveMap, 200); return; }
+  const m = L.map('map-live', { zoomControl: false, attributionControl: false }).setView([-23.5505, -46.6333], 14);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 20 }).addTo(m);
+  L.control.zoom({ position: 'topright' }).addTo(m);
+  _liveMap = m;
+}
+
+// =============================================
+// MODAL
+// =============================================
+function openModal() { document.getElementById('modal-bg').classList.add('on'); }
+function closeModal() { document.getElementById('modal-bg').classList.remove('on'); }
+
+// =============================================
+// UTILS
+// =============================================
+function escHtml(s) { return String(s || '').replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+
+// =============================================
+// INICIALIZAÇÃO
+// =============================================
+document.addEventListener('DOMContentLoaded', function() {
+  if (accessToken) {
+    apiFetch('/api/auth/check-session').then(function(res) {
+      if (res.valid) { currentUser = res.user; unlockAdmin(res.user.email); }
+    }).catch(function() {});
+  }
+});
+</script>
+</body>
+</html>
