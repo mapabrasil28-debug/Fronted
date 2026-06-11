@@ -482,7 +482,7 @@ textarea.inp{resize:none;height:80px;line-height:1.5}
 // ════════════════════════════════════════════════════════════
 // 🔴 LOCAL 2 - COLE SUA URL DO BACKEND AQUI 🔴
 // ════════════════════════════════════════════════════════════
-const API_URL ='https://blim-backend-s5ns.onrender.com';
+const API_URL = 'https://blim-backend-s5ns.onrender.com';
 
 // =============================================
 // SEGURANÇA JWT + SESSÃO ÚNICA
@@ -532,7 +532,7 @@ function nav(id) {
 function waitLeaflet(cb, tries) { tries = tries || 0; if (typeof L !== 'undefined') { cb(); return; } if (tries > 20) return; setTimeout(function() { waitLeaflet(cb, tries + 1); }, 200); }
 
 // =============================================
-// AUTENTICAÇÃO (REAL COM 2FA)
+// AUTENTICAÇÃO (REAL COM 2FA - CORRIGIDA)
 // =============================================
 
 async function doRegister() {
@@ -540,15 +540,37 @@ async function doRegister() {
   const email = document.getElementById('re')?.value || '';
   const password = document.getElementById('rw')?.value || '';
   const terms = document.getElementById('rt')?.checked || false;
+  
   if (!name.trim()) { T('Digite seu nome'); return; }
   if (!email.trim()) { T('Digite seu e-mail'); return; }
   if (!password || password.length < 8) { T('Senha mínimo 8 caracteres'); return; }
   if (!terms) { T('Aceite os termos'); return; }
+  
   try {
     T('Cadastrando...');
-    const res = await apiFetch('/api/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password, role: 'cliente', deviceId: getDeviceId() }) });
-    if (res.accessToken) { accessToken = res.accessToken; refreshToken = res.refreshToken; localStorage.setItem('accessToken', accessToken); localStorage.setItem('refreshToken', refreshToken); currentUser = res.user; updateUserUI(); T('Conta criada!'); nav('s-home'); }
-  } catch(e) { T(e.message); }
+    const res = await apiFetch('/api/auth/register', { 
+      method: 'POST', 
+      body: JSON.stringify({ name, email, password, role: 'cliente', deviceId: getDeviceId() }) 
+    });
+    
+    // Extrai o token de qualquer lugar da resposta
+    const token = res.accessToken || res.token || (res.data && res.data.accessToken) || null;
+    
+    if (token) {
+      accessToken = token;
+      refreshToken = res.refreshToken;
+      localStorage.setItem('accessToken', accessToken);
+      if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+      currentUser = res.user || { name, email };
+      updateUserUI(); 
+      T('Conta criada!'); 
+      nav('s-home');  // ← VAI PARA A TELA INICIAL
+    } else {
+      T(res.error || res.message || 'Erro no cadastro');
+    }
+  } catch(e) { 
+    T(e.message); 
+  }
 }
 
 async function doLogin() {
@@ -559,7 +581,6 @@ async function doLogin() {
   if (!email.trim()) { T('Digite seu e-mail'); return; }
   if (!password) { T('Digite sua senha'); return; }
   
-  // Se 2FA pendente e código não digitado
   if (pending2FA.required && !code2fa) {
     T('Digite o código de autenticação de dois fatores');
     return;
@@ -579,17 +600,23 @@ async function doLogin() {
       return;
     }
     
-    if (res.accessToken) { 
-      accessToken = res.accessToken; refreshToken = res.refreshToken; 
-      localStorage.setItem('accessToken', accessToken); localStorage.setItem('refreshToken', refreshToken); 
-      currentUser = res.user; 
+    // Extrai o token de qualquer lugar da resposta
+    const token = res.accessToken || res.token || (res.data && res.data.accessToken) || null;
+    
+    if (token) {
+      accessToken = token;
+      refreshToken = res.refreshToken;
+      localStorage.setItem('accessToken', accessToken);
+      if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+      currentUser = res.user || { name: email.split('@')[0], email };
       pending2FA = { required: false, userId: null };
       document.getElementById('div-2fa').style.display = 'none';
       document.getElementById('code2fa').value = '';
       updateUserUI(); 
       T('Bem-vinda!'); 
-      nav('s-home'); 
-      connectWebSocket();
+      nav('s-home');  // ← VAI PARA A TELA INICIAL
+    } else {
+      T(res.error || res.message || 'Erro no login');
     }
   } catch(e) { 
     T(e.message); 
@@ -617,7 +644,6 @@ async function forgotPassword() {
   } catch(e) { T(e.message); }
 }
 
-// Função chamada quando o usuário clica no link do e-mail (ex: /reset-password.html?token=xxx)
 function setResetToken(token) {
   resetToken = token;
   nav('s-reset-password');
@@ -1071,7 +1097,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   buildTabs(); buildGrid();
   
-  // Verificar se há token na URL (para reset de senha)
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get('token');
   if (token) {
