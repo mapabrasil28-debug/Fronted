@@ -1104,8 +1104,16 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
   const SUPABASE_URL = 'https://zzcsmenyupnpcrgsgznw.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_bmiam4e7TTQfCGTrQq6v0A_UhygL47K';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-</script>
+const SUPABASE_KEY = 'https://lgutnpsukmezfvtgaaxa.supabase.co';
+    // Ativa a conexão com a Supabase
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // =======================================================
+        //  4. SE VOCÊ TIVER SCRIPTS SEUS, COLE DAQUI PARA BAIXO  
+        // =======================================================
+        
+        console.log("Supabase inicializada com sucesso e pronta para uso!");
+
+    </script>
 </body>
 </html>
